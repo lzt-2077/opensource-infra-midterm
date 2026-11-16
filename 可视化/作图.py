@@ -197,6 +197,64 @@ for i in range(8):
 g5.append('</svg>')
 CH5 = ''.join(g5)
 
+
+# ══════════════════════ 图 6：两个生态的头部结构 ══════════════════════
+q4 = pd.read_csv(O / '整合/Q4-跨生态对照.csv', encoding='utf-8-sig')
+CP = 'PyPI 2025-12(不含extra)'
+CC = 'cargo 主图(去optional)'
+
+
+def _num(x):
+    return float(str(x).replace(',', '').replace('%', ''))
+
+
+def _get(metric, col):
+    row = q4[q4['指标'] == metric].iloc[0]
+    return _num(row[col])
+
+
+KS = [1, 10, 100, 1000]
+py = [_get(f'top{k}占边%', CP) for k in KS]
+cg = [_get(f'top{k}占边%', CC) for k in KS]
+gini_p, gini_c = _get('Gini', CP), _get('Gini', CC)
+W, H, px, py0, pw, ph = 980, 420, 92, 62, 790, 265
+ymax = 80
+
+
+def X(k):
+    return px + pw * np.log10(k) / 3
+
+
+def Y(v):
+    return py0 + ph - ph * v / ymax
+
+
+g6 = [svg_open(W, H, '两个生态的头部结构')]
+for i in range(5):
+    v = ymax * i / 4
+    g6.append(f'<line x1="{px}" y1="{Y(v):.1f}" x2="{px+pw}" y2="{Y(v):.1f}" stroke="{C["grid"]}"/>')
+    g6.append(f'<text x="{px-10}" y="{Y(v)+4:.1f}" font-size="11" fill="{C["dim"]}" text-anchor="end">{v:g}%</text>')
+for k in KS:
+    g6.append(f'<text x="{X(k):.1f}" y="{py0+ph+22}" font-size="11" fill="{C["dim"]}" text-anchor="middle">{k:,}</text>')
+g6.append(f'<line x1="{px}" y1="{py0+ph}" x2="{px+pw}" y2="{py0+ph}" stroke="{C["slate"]}"/>')
+g6.append(f'<line x1="{px}" y1="{py0}" x2="{px}" y2="{py0+ph}" stroke="{C["slate"]}"/>')
+g6.append(f'<text x="{px-52}" y="{py0-14}" font-size="11" fill="{C["dim"]}">累计占边份额（%）</text>')
+g6.append(f'<text x="{px+pw/2:.0f}" y="{py0+ph+46}" font-size="11" fill="{C["dim"]}" text-anchor="middle">前 k 个被依赖包（k，对数轴）</text>')
+for vals, col, lab in [(py, C['blue'], 'PyPI'), (cg, C['green'], 'cargo')]:
+    pts = ' '.join(f'{X(k):.1f},{Y(v):.1f}' for k, v in zip(KS, vals))
+    g6.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2.4"/>')
+    for k, v in zip(KS, vals):
+        g6.append(f'<circle cx="{X(k):.1f}" cy="{Y(v):.1f}" r="4" fill="{col}"/>')
+g6.append(f'<rect x="{px+18}" y="{py0+10}" width="10" height="10" fill="{C["blue"]}"/>')
+g6.append(f'<text x="{px+34}" y="{py0+19}" font-size="12" fill="{C["ink"]}">PyPI（98,585 包）</text>')
+g6.append(f'<rect x="{px+18}" y="{py0+32}" width="10" height="10" fill="{C["green"]}"/>')
+g6.append(f'<text x="{px+34}" y="{py0+41}" font-size="12" fill="{C["ink"]}">cargo（66,315 包）</text>')
+g6.append(f'<text x="{X(1000)-6:.1f}" y="{Y(py[-1])-12:.1f}" font-size="12" fill="{C["blue"]}" text-anchor="end">77.5%</text>')
+g6.append(f'<text x="{X(1000)-6:.1f}" y="{Y(cg[-1])+20:.1f}" font-size="12" fill="{C["green"]}" text-anchor="end">77.3%</text>')
+g6.append(f'<text x="{px+pw-4}" y="{py0+ph-8}" font-size="11" fill="{C["dim"]}" text-anchor="end">Gini 0.924 vs 0.902</text>')
+g6.append('</svg>')
+CH6 = ''.join(g6)
+
 # ══════════════════════ 组装 ══════════════════════
 CH = [
     ('图 1',
@@ -219,6 +277,10 @@ CH = [
      '公司的影响力来自自有账号，还是员工？',
      '(a) 有公司参与的 8,175 个包里，94.1% 没有任何公司组织账号；(b) 同一件事的三种口径相差近 20 倍，口径必须写明。',
      CH5, '数据范围 2025-12 时点｜单位 个（a）与 %（b）｜口径 A/B 可复现于本仓库，C 依赖提交邮箱域名｜来源 S1 × S3｜文件 Q2-员工代持计数证据.csv、Q2-三种口径对照.csv'),
+    ('图 6',
+     '两个生态的头部结构一样吗？',
+     'PyPI 与 cargo 的 top-k 占边曲线几乎重合：top1000 都是 77% 左右；差别只在 top1–top100（cargo 略尖）。两个生态没有公共实体键，这是同法复现，不是实体连接。',
+     CH6, '数据范围 2025-12｜单位 累计占全部入边 %｜PyPI 不含 extra / cargo 去 optional｜来源 S1 × S2（两个独立生态）｜文件 Q4-跨生态对照.csv'),
 ]
 
 html = [f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
@@ -232,7 +294,7 @@ html = [f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
  .lead{{font-size:13px;color:#374151;margin:6px 0 10px}}
  .src{{font-size:11px;color:{C['dim']};border-top:1px dashed #e2e8f0;padding-top:8px;margin-top:6px}}
 </style></head><body><div class="wrap">
-<h1>核心可视化 · 五张</h1>
+<h1>核心可视化 · 六张</h1>
 <div class="sub">开源软件生态中的"基础设施层"及其供养结构 ｜ 所有图横轴均从 0 起，未截断 ｜ 2026-11-16</div>
 """]
 for tag, q, lead, chart, src in CH:
@@ -241,4 +303,4 @@ for tag, q, lead, chart, src in CH:
 html.append('</div></body></html>')
 OUT.write_text(''.join(html), encoding='utf-8')
 print(f'已写 {OUT}  ({OUT.stat().st_size/1024:.0f} KB)')
-print(f'图1 点数 {len(d70)}；图2 点数 {len(d75)}；图3 条目 {len(top)}')
+print(f'图1 点数 {len(d70)}；图2 点数 {len(d75)}；图3 条目 {len(top)}；图6 k 点 {len(KS)}')

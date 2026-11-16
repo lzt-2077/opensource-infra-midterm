@@ -73,7 +73,7 @@ html = (R / '可视化.html').read_text(encoding='utf-8')
 svgs = re.findall(r'<svg.*?</svg>', html, flags=re.S)
 print(f'找到 {len(svgs)} 个 SVG')
 NAMES = ['图1-依赖集中度', '图2-底基扩张稀释', '图3-谁在支撑运行时',
-         '图4-底基由谁供养', '图5-公司影响力']
+         '图4-底基由谁供养', '图5-公司影响力', '图6-两生态对照']
 for i, (svg, name) in enumerate(zip(svgs, NAMES), 1):
     vb = re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', svg)
     W, H = float(vb.group(1)), float(vb.group(2))
@@ -97,12 +97,12 @@ def page_shot(path: Path, name: str, w: int, h: int, wait_ms=3000, extra=None):
     shot(url, OUT / f'{name}.png', w, h, scale=1, wait_ms=wait_ms, extra=extra)
 
 
-page_shot(R / '关联图.html', '图6-数据血缘关联图', 1400, 1150, 2000)
+page_shot(R / '关联图.html', '图7-数据血缘关联图', 1400, 1150, 2000)
 # 图7 用已有的静态渲染（headless 下 3D 画布截图会空白）
 src = R.parent / '依赖图/59-领域分块图.png'
 if src.exists():
-    shutil.copyfile(src, OUT / '图7-领域分块-76块.png')
-    print(f'  ✓ 图7-领域分块-76块.png（复制静态渲染）')
+    shutil.copyfile(src, OUT / '图8-领域分块-76块.png')
+    print(f'  ✓ 图8-领域分块-76块.png（复制静态渲染）')
 
 # 图8：headless 无 WebGL，3D 图不截图（需要时手动在浏览器里截）
 page_shot(R.parent / '依赖图/快照增量动画.html', '图9-快照增量', 1400, 1000, 5000)
