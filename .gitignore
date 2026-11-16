@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+~$*
+.DS_Store
+Thumbs.db
+_ghuser.json
+依赖图/
+整合/包-账号-重建.csv
+整合/包-账号-主体.parquet

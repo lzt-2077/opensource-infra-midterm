@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>多源数据关联图 · 开源生态基础设施层研究</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --line:#2b3140; --ink:#e8ecf3; --dim:#8d97a8;
+    --src:#3b82f6; --key:#f59e0b; --int:#10b981; --out:#a855f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px;background:var(--bg);color:var(--ink);
+       font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+  h1{font-size:20px;margin:0 0 4px}
+  .sub{color:var(--dim);font-size:13px;margin-bottom:24px}
+  .wrap{max-width:1180px;margin:0 auto}
+  .grid{display:grid;grid-template-columns:1fr 240px 1.15fr;gap:0 8px;align-items:start}
+  .col-title{font-size:12px;letter-spacing:.12em;color:var(--dim);margin:0 0 10px;
+             text-transform:uppercase}
+  .box{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+       padding:9px 11px;margin-bottom:8px;font-size:12.5px;line-height:1.45}
+  .box b{display:block;font-size:13px;margin-bottom:2px}
+  .box .m{color:var(--dim);font-size:11.5px}
+  .src{border-left:3px solid var(--src)}
+  .key{background:transparent;border:1px dashed var(--key);color:var(--key);
+       font-family:ui-monospace,Consolas,monospace;font-size:11.5px;text-align:center;
+       padding:8px 6px;margin-bottom:8px}
+  .int{border-left:3px solid var(--int)}
+  .out{border-left:3px solid var(--out)}
+  .arrow{text-align:center;color:var(--dim);font-size:14px;line-height:1;margin:2px 0 6px}
+  .tag{display:inline-block;font-size:10.5px;padding:1px 6px;border-radius:10px;
+       border:1px solid var(--line);color:var(--dim);margin-right:4px}
+  table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px}
+  th,td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left}
+  th{color:var(--dim);font-weight:500;font-size:11px}
+  .note{margin-top:22px;font-size:12px;color:var(--dim);line-height:1.7;
+        border-top:1px solid var(--line);padding-top:14px}
+  code{font-family:ui-monospace,Consolas,monospace;color:var(--key);font-size:11.5px}
+  .ok{color:var(--int)} .warn{color:var(--key)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>多源数据关联图（数据血缘）</h1>
+  <div class="sub">开源软件生态中的"基础设施层"及其供养结构 ｜ 7 个独立数据源 · 6 类数据形态 · 原始约 4.8 GB ｜ 2026-11-16</div>
+
+  <div class="grid">
+    <!-- 左：数据源 -->
+    <div>
+      <div class="col-title">① 独立数据源（Raw）</div>
+
+      <div class="box src"><b>S1 · crates.io 数据库全量 dump</b>
+        <div class="m">关系型数据库导出 · 2.2 GB 压缩 / 3.2 GB 解包 · 43,258,107 条依赖行</div>
+        <div style="margin-top:5px"><span class="tag">dependencies</span><span class="tag">crates</span><span class="tag">versions</span><span class="tag">owners</span></div>
+      </div>
+
+      <div class="box src"><b>S2 · PyPI 全量包元数据</b>
+        <div class="m">Parquet 列式存储 · 1.4 GB（6 分片）</div>
+      </div>
+
+      <div class="box src"><b>S3 · GitHub REST/GraphQL API</b>
+        <div class="m">公开 API（token + 限速重试）· 约 10 MB · 贡献者 / 组织 / 提交数 / 自报公司域名</div>
+      </div>
+
+      <div class="box src"><b>S4 · 基金会公开财务文件</b>
+        <div class="m">PDF · 约 100 MB · LF 990 / OpenSSL / Blender / PSF / GitLab S-1</div>
+      </div>
+
+      <div class="box src"><b>S5 · 学术文献</b>
+        <div class="m">PDF + 元数据 · 约 15 MB · 11 篇（含 Eghbal 2016 基础设施定义）</div>
+      </div>
+
+      <div class="box src"><b>S6 · LF / CNCF 成员与域名映射</b>
+        <div class="m">CSV · 120 KB · 2,558 行 · 辅助字典源</div>
+      </div>
+
+      <div class="box src"><b>S7 · npm / Maven 试点样本</b>
+        <div class="m">registry API · 17 MB · 跨生态外推验证</div>
+      </div>
+    </div>
+
+    <!-- 中：关联键 -->
+    <div>
+      <div class="col-title">② 跨源关联键</div>
+
+      <div class="box key">crate_id / name</div>
+      <div class="arrow">↓</div>
+      <div class="box key">crate_owners<br>owner_id → login</div>
+      <div class="arrow">↓</div>
+      <div class="box key">domain → org_name</div>
+      <div class="arrow">↓</div>
+      <div class="box key">created_at<br>→ 月度锚点</div>
+      <div class="arrow">↓</div>
+      <div class="box key">s→t 依赖边</div>
+    </div>
+
+    <!-- 右：融合层与产出 -->
+    <div>
+      <div class="col-title">③ 融合层（Integrated）与产出</div>
+
+      <div class="box int"><b>包级融合表</b>
+        <div class="m">171,730 行 × 30 列</div>
+        <div class="m" style="margin-top:4px">包 · 命名空间 · 仓库组织 · 法人类型 · 技术领域 · 入度 · 传递可达 · 技术层 · 是否底基</div>
+      </div>
+
+      <div class="box int"><b>包-账号-主体表</b>
+        <div class="m">422,586 行 · 77,477 个账号</div>
+        <div class="m" style="margin-top:4px">实体解析成功率 <span class="ok">行级 54.0% / 账号级 47.1%</span>（S1 owners × S3 账号画像）</div>
+      </div>
+
+      <div class="box int"><b>月度快照序列</b>
+        <div class="m">146 个月（2014-11 → 2026-11）· 每快照含全量依赖边</div>
+      </div>
+
+      <div class="arrow">↓ 分析与推导 ↓</div>
+
+      <div class="box out"><b>Q1 底基由谁供养？</b>
+        <div class="m">入度分布 × 账号主体类型 × 基金会成员</div>
+      </div>
+      <div class="box out"><b>Q2 公司是"造地基"还是"用现成"？</b>
+        <div class="m">公司自有账号 vs 员工在他人项目中的影响力</div>
+      </div>
+      <div class="box out"><b>Q3 资金与技术重要度匹配吗？</b>
+        <div class="m">依赖图位置 × 990 收入 × 维护者规模</div>
+      </div>
+      <div class="box out"><b>Q4 两个生态的形状差异</b>
+        <div class="m">cargo 尖塔 vs PyPI 高原（S1 × S2 同法对照）</div>
+      </div>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>关联维度</th><th>连接方式</th><th>涉及源</th><th>关联质量</th></tr>
+    <tr><td>实体关联（一级）</td><td>包 → owner_id → GitHub login → 账号主体类型</td><td>S1 × S3</td><td class="ok">行级 54.0%；账号级 47.1%</td></tr>
+    <tr><td>实体关联（二级）</td><td>仓库组织 → 域名 → LF/CNCF 成员机构名</td><td>S1 × S3 × S6</td><td class="warn">归一化后匹配，覆盖率有限</td></tr>
+    <tr><td>时间关联</td><td>版本 created_at → 统一月度锚点</td><td>S1 内部</td><td class="ok">146 个快照，零缺失</td></tr>
+    <tr><td>网络关联</td><td>依赖边构成有向图，计算位置指标</td><td>S1</td><td class="ok">171,730 个包有位置</td></tr>
+    <tr><td>语义关联</td><td>分类 + 关键词 → 技术领域标签</td><td>S1 × S5</td><td class="warn">24.8%（仅头部与底基）</td></tr>
+    <tr><td>跨生态对齐</td><td>同一方法在 cargo / PyPI 各跑一遍</td><td>S1 × S2</td><td class="ok">分布形状可直接比较</td></tr>
+  </table>
+
+  <div class="note">
+    <b>为什么单一信源无法回答核心问题</b><br>
+    S1 知道「谁被依赖」但只有 owner 数字 ID，不知道背后是谁；S3 知道「账号背后是公司还是个人」，但不知道这些包在结构上有多重要；
+    S4 知道「机构有多少钱」，但不知道钱花在了哪个技术位置。<b>只有把三者接起来，才能回答「最重要的技术由谁供养」这个矛盾命题。</b><br><br>
+    <b>关联链</b>：<code>依赖图位置</code> × <code>账号主体</code> × <code>机构资金</code> —— 三个源各自缺一块，缺的正好是另外两个有的。
+  </div>
+</div>
+</body>
+</html>

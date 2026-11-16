@@ -1,0 +1,2001 @@
+created_at,description,documentation,homepage,id,max_features,max_upload_size,name,readme,repository,trustpub_only,updated_at
+2026-05-27 05:23:25.60157+00,Ratatui local client for the Triage terminal supervisor.,,https://github.com/hyeons-lab/triage,2519070,,,triage,"# triage
+
+A terminal-based Ratatui local client for **Triage**, the attention-routing terminal supervisor.
+
+This TUI client connects to the persistent background daemon (`triaged`) over local Unix sockets or Named Pipes, allowing you to attach, interact, monitor, and switch focus across persistent terminal workspaces.
+
+## Features
+
+*   **Durable Sessions**: PTYs are owned by the daemon, so they stay alive when you close the client, detach, or restart the daemon.
+*   **Workspace Sidebar**: A session list showing each session's repo, worktree, and branch, so you can tell at a glance which terminal is which.
+*   **Approval Judge Controls**: Inspect and toggle per-session AI agent auto-approval policy (`F5` overlay; `y`/`n`/`r` policy toggle; status line badge).
+*   **Attach and Switch**: Cycle between sessions and drive the focused one directly; input goes through Triage's one-writer lease model.
+*   **Update Banner**: A read-only notice when a newer Triage release is published (see [Update checks](#update-checks)).
+*   **High Performance**: Built with Ratatui over a WezTerm-derived virtual terminal engine.
+
+## Installation
+
+Install both the client and daemon:
+
+```bash
+cargo install triage triaged
+```
+
+> On **aarch64**, building `triaged` from source needs a nightly toolchain —
+> 1.99.0-nightly or newer (`nightly-2026-07-08`+) — because its `cera` inference
+> dependency uses unstable NEON intrinsics. Use `cargo +nightly install triage triaged`,
+> or take a prebuilt binary from a
+> [release](https://github.com/hyeons-lab/triage/releases).
+
+## Usage
+
+First make sure the daemon is running. Start it in the foreground:
+
+```bash
+triaged
+```
+
+…or register it to start automatically at login (macOS, Linux, and Windows):
+
+```bash
+triaged service install
+```
+
+Then launch the client interface:
+
+```bash
+triage
+```
+
+The client connects to the daemon over a local Unix domain socket (macOS/Linux)
+or named pipe (Windows). See [`triaged`](https://crates.io/crates/triaged) for
+daemon and service details.
+
+## Keys
+
+Everything else you type is forwarded to the focused session.
+
+| Key | Action |
+| --- | ------ |
+| `Ctrl+N` | New session |
+| `Ctrl+W` | Close the focused session |
+| `Alt+↓` / `Alt+→` / `F3` | Next session |
+| `Alt+↑` / `Alt+←` / `F4` | Previous session |
+| `F2` | Show/hide the sidebar |
+| `F5` | Open Approval Judge settings overlay |
+| `PageUp` / `PageDown` | Scroll the focused session's scrollback |
+| `Ctrl+Q` | Quit the client (sessions keep running in the daemon) |
+
+Inside the `F5` settings overlay:
+- **`y`**: Enable auto-approval for this session
+- **`n`**: Disable auto-approval for this session (always ask)
+- **`r`**: Reset session to daemon default policy
+- **`Esc`** / **`q`** / **`F5`**: Close settings overlay
+
+`Ctrl+C` is forwarded to the session, not intercepted — it interrupts the
+running program, as in any terminal. Use `Ctrl+Q` to leave the client.
+
+## Update checks
+
+The daemon polls for newer releases and the TUI surfaces an ""update available""
+banner naming the new version. It is **read-only** — nothing is downloaded or
+installed automatically. Configure or disable it under `[update]` in
+`~/.config/triage/config.toml`; see the
+[`triaged`](https://crates.io/crates/triaged) docs.
+",https://github.com/hyeons-lab/triage,f,2026-09-11 21:13:00.565976+00
+2023-05-01 12:06:24.629411+00,"Crate name reserved
+",,,853351,,,madara,"<p align=""center"">
+  <h1 align=""center"">madara</h1>
+</p>
+
+Squatting this name just in case. [Contact me](mailto:me@xjonathan.dev) if you need it.
+",,f,2023-05-01 12:06:24.629411+00
+2023-05-24 06:42:04.039181+00,Rust structure mapped to Swagger,,https://github.com/denganjia/openapi-schema,872703,,,openapi-schema,"# OpenApi-Schema
+
+Rust structure mapped to openapi 
+
+You can use this package will openapi document into rust structure
+# Use
+```bash
+cargo add openapi-schema
+```
+```rust
+use openapi_schema::{from_path, Doc};
+
+fn main() {
+    let filepath = ""./index.json"";
+    let json = from_path(filepath);
+    match json {
+        Ok(some_doc) => match some_doc {
+            Doc::V2(swagger) => {
+                println!(""swagger version:{}"", swagger.swagger)
+            }
+            Doc::V3(openapi) => {
+                println!(""openapi version:{}"", openapi.openapi)
+            }
+        },
+        Err(e) => {
+            println!(""{:?}"", e)
+        }
+    }
+}
+```
+
+# Notice
+
+Because some words are reserved words in rust, so will the json structure mapped to rust after structure, rust in the field name is different from some of json
+  |Rust|Json|
+  | --- | --- |
+  | r#type | type |
+  | r#enum | enum |
+  | r#in | in |
+  | reference | $ref |
+
+>For using camelCase in json representation of the field, use snake_case in rust",https://github.com/denganjia/openapi-schema,f,2023-06-21 02:13:09.838873+00
+2024-02-25 16:14:19.767307+00,"Wappu is a fast and flexible web scraping library for Rust, designed to efficiently navigate and extract data from websites. Perfect for data mining, content aggregation, and web automation tasks.",,,1152587,,,wappu,"# Wappu: A Rust Web Scraping Library
+
+Wappu is a comprehensive web scraping library written in Rust, designed for ease of use and performance. It integrates seamlessly HTTP client capabilities with powerful HTML parsing functionalities, allowing users to fetch and parse web content efficiently.
+
+## Features
+
+- **Asynchronous HTTP Requests**: Fetch web pages asynchronously with a simple-to-use HTTP client.
+- **HTML Parsing**: Easily parse and query HTML documents to extract relevant data.
+- **Flexible Selectors**: Use CSS-like selectors to pinpoint and extract elements from parsed HTML.
+- **Error Handling**: Robust error handling for both network requests and HTML parsing.
+
+## Getting Started
+
+### Prerequisites
+
+Ensure you have Rust and Cargo installed on your system. Wappu requires Rust version 1.40 or newer.
+
+### Installation
+
+Add Wappu to your project's `Cargo.toml`:
+
+```toml
+[dependencies]
+wappu = ""0.2.4""
+reqwest = ""0.11.24""
+```
+
+### Quick Example
+
+Here's a quick example to fetch and parse the title of example.com:
+
+```rust
+use wappu::{WappuClient, HtmlParser, Selector};
+#[tokio::main]
+async fn main() {
+    let client = WappuClient::new();
+    let html_content = client.get(""http://example.com"", None).await.expect(""Failed to fetch content"");
+
+    let parsed_html = HtmlParser::new().parse_html(&html_content.text());
+    let mut selector = Selector::new();
+    let title_selector = selector.from_tag_name(""h1"");
+    let title_selection = title_selector.select(&parsed_html);
+    let title_text = title_selection.text();
+
+    println!(""Title: {}"", title_text);
+}
+```
+
+## Documentation
+
+For detailed documentation, including API reference and advanced usage, visit [Wappu Documentation](#). (Not yet done)
+
+## Contributing
+
+Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md) for more details.
+
+## License
+
+Wappu is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Thanks to the Rust community for the invaluable resources and support.
+- Special thanks to [httpbin](https://httpbin.org/) for providing HTTP request & response service, making it easier to test HTTP client functionalities.
+",,f,2024-03-31 16:25:27.380231+00
+2024-03-13 10:12:48.064691+00,Provides assets management functionality for Flatbox engine,,https://konceptosociala.eu.org/flatbox,1171587,,,flatbox_assets,,https://github.com/konceptosociala/flatbox,f,2024-03-13 10:12:48.064691+00
+2024-03-25 13:26:39.711734+00,Swap Bevy Worlds at runtime,,,1185299,,,bevy_worldswap,"# Bevy World-Swap
+
+Swap an app's `World` at runtime with another `World`. Useful for having separate menu and game worlds, for separate loading and main worlds, etc.
+
+
+## Features
+
+
+
+
+## Bevy compatability
+
+| `bevy` | `bevy_worldswap` |
+|--------|-------------------|
+| 0.13   | main              |
+",https://github.com/UkoeHB/bevy_worldswap,f,2024-03-25 13:26:39.711734+00
+2024-04-14 16:41:03.430624+00,"Just an example repository, on how rust docs works",,,1208368,,,comments_rust_docs,,,f,2024-04-14 16:41:03.430624+00
+2024-03-13 12:56:00.940663+00,Unofficial Lua 5.4 unsafe bindings,,,1171666,,,lua54-sys,,,f,2024-03-13 13:00:51.309345+00
+2024-03-13 11:23:56.402703+00,An async implementation of a rqlite client,https://docs.rs/rqlite/,https://codeberg.org/zesty/rqlite-rs,1171622,,,rqlite-ha421,"# rqlite-ha421
+a temporary fork of rqlite-rs
+# rqlite-rs
+An asynchronous rqlite client for rust",https://codeberg.org/zesty/rqlite-rs,f,2024-03-13 15:55:37.648138+00
+2024-03-17 19:53:15.17254+00,Test,,,1176759,,,minigrepsada,,,f,2024-03-17 19:57:51.706603+00
+2025-08-08 23:35:51.015728+00,A lightweight stdio bridge server that serves StaticMCP files.,,,1787413,,,staticmcp_stdio_bridge,"# StaticMCP STDIO Bridge
+
+A lightweight stdio bridge server that serves StaticMCP files.
+
+## How It Works
+
+The StaticMCP Bridge acts as a translation layer between the MCP protocol and your static JSON files:
+
+1. **Manifest**: A `mcp.json` file describes available resources and tools
+2. **Resources**: Static JSON files in `resources/` directory 
+3. **Tools**: Pre-computed tool responses in `tools/` directory structure
+4. **Bridge**: This server dynamically routes MCP requests to the appropriate JSON files
+
+_More about StaticMCP on https://staticmcp.com._
+
+## Installation
+
+```bash
+cargo install static_mcp_bridge
+```
+
+Or build from source:
+
+```bash
+git clone https://github.com/StaticMCP/StaticMCP
+cd StaticMCP/bridge
+cargo build --release
+```
+
+## Quick Start
+
+### 1. Create a StaticMCP Directory Structure
+
+```
+my-static-mcp/
+  ├── mcp.json                       # Manifest file
+  ├── resources/
+  │     ├── README.md.json           # Resource responses
+  │     └── config.json.json
+  └── tools/
+        ├── search/
+        │     ├── rust.json          # Tool response for search(""rust"")
+        │     └── javascript.json    # Tool response for search(""javascript"")
+        └── analyze/
+              └── file.json          # Tool response for analyze(""file"")
+```
+
+### 2. Create the Manifest (`mcp.json`)
+
+```json
+{
+  ""serverInfo"": {
+    ""name"": ""My StaticMCP Server"",
+    ""version"": ""1.0.0""
+  },
+  ""capabilities"": {
+    ""resources"": [
+      {
+        ""uri"": ""file://README.md"",
+        ""name"": ""Project README"",
+        ""description"": ""Main project documentation""
+      }
+    ],
+    ""tools"": [
+      {
+        ""name"": ""search"",
+        ""description"": ""Search for information"",
+        ""inputSchema"": {
+          ""type"": ""object"",
+          ""properties"": {
+            ""query"": { ""type"": ""string"" }
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+### 3. Create Resource Files
+
+`resources/README.md.json`:
+```json
+{
+  ""contents"": [
+    {
+      ""uri"": ""file://README.md"",
+      ""mimeType"": ""text/markdown"",
+      ""text"": ""# My Project\n\nThis is a sample README...""
+    }
+  ]
+}
+```
+
+### 4. Create Tool Response Files
+
+`tools/search/rust.json`:
+```json
+{
+  ""content"": [
+    {
+      ""type"": ""text"",
+      ""text"": ""Here are search results for 'rust':\n\n1. Rust Programming Language\n2. Systems programming\n3. Memory safety""
+    }
+  ]
+}
+```
+
+### 5. Run the Bridge
+
+```bash
+# Local directory
+static-mcp-bridge ./my-static-mcp
+
+# Remote URL (hosted static files)
+static-mcp-bridge https://mysite.com/my-mcp
+```
+
+## Usage with MCP Inspector
+
+Test your StaticMCP server using the official MCP Inspector:
+
+```bash
+npx @modelcontextprotocol/inspector static-mcp-bridge https://yourdomain.com/your-mcp
+```
+
+## File Path Conventions
+
+The bridge automatically maps MCP requests to file paths:
+
+### Resources
+- `file://path/to/file` → `resources/path/to/file.json`
+- `custom://resource` → `resources/resource.json`
+
+### Tools
+- Single argument: `tools/{tool_name}/{arg_value}.json`
+- Two arguments: `tools/{tool_name}/{arg1}/{arg2}.json` (sorted)
+
+Examples:
+- `search(""rust"")` → `tools/search/rust.json`
+- `analyze(file=""test.txt"", format=""json"")` → `tools/analyze/json/test.txt.json`
+
+## Response Format
+
+### Resource Responses
+```json
+{
+  ""contents"": [
+    {
+      ""uri"": ""file://example.txt"",
+      ""mimeType"": ""text/plain"",
+      ""text"": ""File content here""
+    }
+  ]
+}
+```
+
+### Tool Responses
+```json
+{
+  ""content"": [
+    {
+      ""type"": ""text"",
+      ""text"": ""Tool response text""
+    }
+  ]
+}
+```
+
+## Deployment Options
+
+### Static Web Hosting
+Deploy your StaticMCP files to any static hosting service:
+
+- **Vercel**: `vercel --prod`
+- **Netlify**: Drag & drop or Git integration
+- **GitHub Pages**: Push to `gh-pages` branch
+- **AWS S3**: Upload files to S3 bucket with public access
+- **CDN**: Use CloudFlare, AWS CloudFront, etc.
+
+### Example with Vercel
+```bash
+cd my-static-mcp
+echo '{""builds"": [{""src"": ""**"", ""use"": ""@vercel/static""}]}' > vercel.json
+vercel --prod
+```
+
+Then use: `static-mcp-bridge https://my-mcp.vercel.app`
+
+## Building StaticMCP Content
+
+You can generate your StaticMCP files using any method:
+
+### Python Script
+```python
+import json
+import os
+
+# Generate tool responses
+for query in ['rust', 'javascript', 'python']:
+    result = {""content"": [{""type"": ""text"", ""text"": f""Results for {query}...""}]}
+    os.makedirs(f'tools/search', exist_ok=True)
+    with open(f'tools/search/{query}.json', 'w') as f:
+        json.dump(result, f)
+```
+
+### Build Process
+```bash
+#!/bin/bash
+# generate-mcp.sh
+
+echo ""Generating StaticMCP content...""
+python scripts/generate_resources.py
+python scripts/generate_tools.py
+echo ""StaticMCP content ready!""
+```
+
+## Advanced Features
+
+### Error Handling
+If a requested file doesn't exist, the bridge returns an appropriate MCP error response.
+
+### CORS Support
+When serving over HTTP, the bridge handles CORS headers automatically.
+
+### Caching
+All responses are highly cacheable since content is static. Consider setting long cache headers when serving files.
+
+## Examples
+
+Check out these example StaticMCP implementations:
+
+- [Resume MCP](https://github.com/example/resume-mcp) - Personal resume and portfolio
+
+---
+
+**StaticMCP Bridge** - Turn any static file hosting into a powerful MCP server! 🚀",https://github.com/StaticMCP/stdio_bridge,f,2025-08-08 23:35:51.015728+00
+2024-09-04 20:30:39.530494+00,A library for testing,,,1363756,,,test_minigrip,,,f,2024-09-04 20:30:39.530494+00
+2022-11-29 15:53:11.929626+00,Quickly create releases on Github from the command line or CI using conventional commits.,https://github.com/south-bay-warriors/donder-release#readme,https://github.com/south-bay-warriors/donder-release,725481,,,donder-release,"<p align=""center"">
+  <img src=""https://user-images.githubusercontent.com/12548890/204842249-c59bf410-2ab2-41c7-8f1a-bbb7aa1f5275.png"" style=""border-radius: 8px;"">
+  <h1 align=""center"">donder-release</h1>
+  <h3 align=""center"">Quickly create releases on Github from the command line or CI using conventional commits.</h3>
+</p>
+
+<br />
+
+> Upgrading from v1? See the [migration guide](docs/MIGRATION_V2.md).
+
+## Installation
+
+#### With Cargo
+
+```bash
+cargo install donder-release
+```
+
+#### With Npm
+
+```bash
+npm install -g donder-release-cli
+```
+
+## Quick start
+
+Set up a configuration file in your project:
+
+```bash
+# Interactive wizard
+donder-release --setup
+
+# Or write a default config without prompts
+donder-release --skip-interactive
+```
+
+Preview a release without publishing:
+
+```bash
+donder-release --dry-run
+```
+
+Publish a release:
+
+```bash
+donder-release
+```
+
+## CLI options
+
+```
+-s, --setup              Interactive configuration setup wizard
+    --skip-interactive   Write default configuration file without prompts
+-c, --config <FILE>      Configuration file path [default: donder-release.yaml]
+-p, --packages           Comma-separated list of monorepo packages to release
+    --pre-id <ID>        Pre-release identifier (e.g. alpha, beta, rc)
+    --dry-run            Preview a pending release without publishing
+-v, --version            Output CLI version
+```
+
+## Configuration
+
+All configuration is done in `donder-release.yaml`.
+
+### versioning
+
+Versioning scheme for your project. Defaults to `semver`.
+
+```yaml
+# Semantic versioning (default)
+versioning: semver
+
+# Calendar versioning
+versioning: calver
+calver_format: YYYY.MM.MICRO
+```
+
+See [CalVer](#calendar-versioning-calver) for details.
+
+### release_message
+
+The commit message for the release commit. Use `%s` as a placeholder for the version.
+
+```yaml
+release_message: ""chore(release): %s""
+```
+
+### tag_prefix
+
+Prefix for release tags.
+
+```yaml
+tag_prefix: v # creates tags like v1.0.0
+```
+
+### types
+
+Commit types that trigger a release. `feat`, `fix` and `revert` are reserved types with fixed bump rules (`feat` = minor, `fix`/`revert` = patch). You can override their section names and add custom types with `minor` or `patch` bumps.
+
+```yaml
+types:
+  - { commit_type: feat, section: Features }
+  - { commit_type: fix, section: Bug Fixes }
+  - { commit_type: perf, bump: patch, section: Performance Improvements }
+```
+
+### bump_files
+
+Files to update with the new version. At least one must be defined. Supported targets: `cargo`, `npm`, `pub`, `android`, `ios`.
+
+```yaml
+bump_files:
+  - { target: cargo, path: <root> }
+  - { target: npm, path: <root> }
+  - { target: pub, path: <root> }
+  - { target: android, path: android }
+  - { target: ios, path: ios/MyApp }
+```
+
+Use `<root>` to target the directory where donder-release is executed.
+
+#### iOS and App Store Connect
+
+App Store Connect only allows version numbers as 3 period-separated integers, no pre-release or build metadata strings. To work around this, donder-release translates pre-release identifiers into numeric values for `CURRENT_PROJECT_VERSION`:
+
+| Pre-release             | CURRENT_PROJECT_VERSION |
+| ----------------------- | ----------------------- |
+| `alpha.N`               | `1.N`                   |
+| `beta.N`                | `2.N`                   |
+| `rc.N`                  | `3.N`                   |
+| Other                   | `4.N`                   |
+| Stable (no pre-release) | `5.0`                   |
+
+`MARKETING_VERSION` is always set to the semver version without pre-release info (e.g. `1.2.0`).
+
+For example, a release of `1.2.0-beta.3` sets:
+
+- `MARKETING_VERSION = 1.2.0`
+- `CURRENT_PROJECT_VERSION = 2.3`
+
+In CalVer mode, `CURRENT_PROJECT_VERSION` is always incremented from the current value in the file.
+
+#### Build metadata
+
+Append an auto-incrementing build number to the version:
+
+```yaml
+bump_files:
+  - { target: npm, path: <root>, build_metadata: true } # e.g. 1.0.0+1, 1.0.0+2
+```
+
+Build metadata must be numeric. For `android` and `ios` targets, the build number is always incremented automatically.
+
+### changelog_file
+
+Write release notes to a changelog file:
+
+```yaml
+changelog_file: CHANGELOG.md
+```
+
+### clean_pre_releases
+
+Delete pre-release tags and GitHub releases when a stable release is published (semver only):
+
+```yaml
+clean_pre_releases: true
+```
+
+### Monorepo support
+
+Mark bump files as individual packages to release them independently. Each package gets its own tags, changelog, and version based on commits under its directory.
+
+```yaml
+bump_files:
+  - { target: npm, path: packages/api, package: true }
+  - { target: npm, path: packages/web, package: true }
+```
+
+Release specific packages:
+
+```bash
+donder-release --packages api,web
+```
+
+#### Per-package versioning
+
+In monorepos, each package can use its own versioning scheme:
+
+```yaml
+versioning: semver
+bump_files:
+  - { target: npm, path: packages/api, package: true }
+  - { target: npm, path: packages/app, package: true, versioning: calver, calver_format: YYYY.MM.MICRO }
+```
+
+Packages without a versioning override inherit the global setting. A per-package `calver_format` follows the same rules as the global one (see [CalVer](#calendar-versioning-calver)), and falls back to the global `calver_format` when omitted.
+
+## Calendar versioning (CalVer)
+
+Date-based versioning for projects where releases are time-driven (mobile apps, services, infrastructure).
+
+```yaml
+versioning: calver
+calver_format: YYYY.MM.MICRO
+```
+
+Supported format segments:
+
+| Segment | Description | Example |
+|---|---|---|
+| `YYYY` | Full year | 2026 |
+| `YY` | Short year | 26 |
+| `0Y` | Zero-padded year | 06 |
+| `MM` | Short month | 1-12 |
+| `0M` | Zero-padded month | 01-12 |
+| `WW` | Week number | 1-52 |
+| `0W` | Zero-padded week | 01-52 |
+| `MICRO` | Auto-incrementing counter | 0, 1, 2... |
+
+The format must have exactly 3 dot-separated segments, ordered year, period (month or week), then `MICRO`, e.g. `YYYY.MM.MICRO` or `YY.0W.MICRO`. Releases are sorted by comparing segments left to right, so this order keeps them chronological. MICRO resets to 0 when the calendar segment changes (e.g. new month).
+
+Pre-releases are not supported with CalVer. Breaking changes are tracked in the changelog but do not affect the version number.
+
+## Pre-releases
+
+Create pre-release versions with the `--pre-id` flag (semver only):
+
+```bash
+donder-release --pre-id alpha  # 1.0.1-alpha.0
+donder-release --pre-id beta   # 1.0.1-beta.0
+donder-release --pre-id rc     # 1.0.1-rc.0
+```
+
+Subsequent pre-releases auto-increment: `1.0.1-alpha.0` -> `1.0.1-alpha.1`.
+
+## Environment variables
+
+| Variable | Description | Default |
+|---|---|---|
+| `GH_TOKEN` | GitHub personal access token (required for publishing) | |
+| `GIT_AUTHOR_NAME` | Git author name | `sbayw-bot` |
+| `GIT_AUTHOR_EMAIL` | Git author email | `<sbayw-bot current primary email>` |
+| `GIT_COMMITTER_NAME` | Git committer name | Falls back to `GIT_AUTHOR_NAME` |
+| `GIT_COMMITTER_EMAIL` | Git committer email | Falls back to `GIT_AUTHOR_EMAIL` |
+
+Environment variables can be set in a `donder-release.env` file in your project root.
+
+#### GH_TOKEN permissions
+
+The `GH_TOKEN` must be a personal access token with **Contents: Read and write** permission on the target repository. This allows donder-release to push commits, tags, and create GitHub releases.
+
+If the current branch is protected, the user that created the PAT must be added to the branch protection bypass list (**Settings > Rules > Rulesets** or **Settings > Branches > Allow specified actors to bypass required pull requests**).
+
+## CI / GitHub Actions
+
+Example workflow for manual releases:
+
+```yaml
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      type:
+        description: Release type
+        required: true
+        type: choice
+        options:
+          - release
+          - beta
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - run: cargo install donder-release
+
+      - name: Run donder-release
+        run: |
+          if [ ""${{ inputs.type }}"" = ""beta"" ]; then
+            donder-release --pre-id beta
+          else
+            donder-release
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+```
+
+> **Note:** Use `persist-credentials: false` on checkout so donder-release authenticates with your `GH_TOKEN` instead of the default `GITHUB_TOKEN`.
+
+## Conventional Commits
+
+donder-release follows the [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) specification:
+
+```
+<type>(<optional scope>): <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+Version bumps are determined by commit type (semver only):
+
+| Commit | Version bump |
+|---|---|
+| `fix: ...` | Patch (1.0.0 -> 1.0.1) |
+| `feat: ...` | Minor (1.0.0 -> 1.1.0) |
+| `feat!: ...` or `BREAKING CHANGE:` footer | Major (1.0.0 -> 2.0.0) |
+
+In CalVer mode, all releasable commits increment the MICRO counter regardless of type.
+",https://github.com/south-bay-warriors/donder-release,f,2026-09-23 18:47:29.795734+00
+2024-11-28 01:58:47.556341+00,A rust clone of find.,,,1463809,,,Find_Matt_C,,,f,2024-11-28 01:58:47.556341+00
+2026-02-11 17:12:08.529891+00,Functionality to interact with Pijul identities,,,2112894,,,inflorescence-pijul-identity,,https://nest.pijul.com/pijul/pijul,f,2026-02-11 17:12:08.529891+00
+2025-05-12 21:48:26.862634+00,Experimental library for profiling tracing spans.,,,1671156,,,tracing-prof,"- [tracing-prof](#tracing-prof)
+  - [Profiling](#profiling)
+    - [Wall Clock](#wall-clock)
+    - [CPU Time](#cpu-time)
+    - [Memory](#memory)
+    - [Allocations](#allocations)
+    - [Heap](#heap)
+  - [Exporting](#exporting)
+    - [pprof](#pprof)
+    - [Pyroscope](#pyroscope)
+  - [Performance Overhead](#performance-overhead)
+
+
+# tracing-prof
+
+A library for continuous profiling of Rust applications built around the [tracing](https://crates.io/crates/tracing) library.
+
+The library is **experimental**, untested, unoptimized, may cause crashes, nasal demons or world war three, and is not recommended for production use.
+
+Platform support is limited to Linux for now, but in theory most platform could be supported where `std` compiles.
+
+## Profiling
+
+The library works by installing a layer via [tracing-subscriber](https://crates.io/crates/tracing-subscriber) that can track various metrics for every span.
+
+Metrics are collected when a span is exited or closed depending on the type of the profile.
+
+### Wall Clock
+
+The wall clock time in each span is collected the same way as the `tracing-subscriber::fmt` layer does.
+
+The following is collected:
+
+- `wall_idle`: The time a span spent in a created but not entered state.
+- `wall_busy`: The time a span spent in an entered state.
+- `wall`: The total time a span spent in any states.
+
+### CPU Time
+
+The CPU time is collected using [`getrusage`](https://man7.org/linux/man-pages/man2/getrusage.2.html).
+
+The following is collected:
+
+- `cpu_user`: The user CPU time a span spent in an entered state.
+- `cpu_sys`: The system CPU time a span spent in an entered state.
+- `cpu`: The total CPU time a span spent in an entered state.
+
+### Memory
+
+### Allocations
+
+Allocation tracking can be done by registering a global allocator that tags each allocation borrowing ideas from the [tracking_allocator](https://docs.rs/tracking-allocator/latest/tracking_allocator/) crate.
+
+The following is collected:
+
+- `alloc_objects`: the number of allocations
+- `alloc_bytes`: the number of bytes allocated
+
+Calls to `realloc` are counted as a deallocation and an allocation.
+
+### Heap
+
+If allocation tracking is enabled, memory for each span are retained until all memory for the span is freed.
+This allows for periodic snapshots of the heap to be taken for each span.
+
+The following is collected:
+
+- `inuse_objects`: the number of ""live"" allocations that were not freed
+- `inuse_bytes`: the amount of bytes still allocated
+
+
+## Exporting
+
+### pprof
+
+Profiles can be exported to local files in pprof format.
+
+### Pyroscope
+
+Profiles can be sent to a [Pyroscope](https://pyroscope.io/) server.
+
+## Performance Overhead
+
+Honestly no idea. No extensive benchmarks have been done yet, YMMV.
+
+The collection of samples is done whenever a span is closed or exited, as opposed to other profilers that do sample the stack at a fixed interval (e.g. SIGPROF).
+This means that the overhead is proportional to the number of spans that are being tracked.
+
+If allocation tracking is enabled, 8 additional bytes of memory is used for the tag **for every allocation**, even if the allocation itself is excluded from tracking.
+This may inflate the memory usage of your application for very small and frequent allocations.
+In addition, bookkeeping for various metrics also uses memory.
+
+Every exporter also adds its own overhead, e.g. file I/O or http requests.
+All the processing and bookkeeping is done in a separate thread and will never block the application.
+",,f,2025-05-14 23:19:03.311868+00
+2024-03-13 13:30:08.148574+00,A platform agnostic driver to interface with the ADS7953 ADC,,,1171681,,,ads7953-rs,"# ADS7953-rs
+Rust library, implemented platform-agnostic with embedded-hal.  
+Currently WIP and untested
+",https://github.com/PercyJW-2/ads7953-rs,f,2024-03-13 13:30:08.148574+00
+2024-11-28 01:59:45.159122+00,A simple rust clone of echo.,,,1463810,,,Echo_Matt_C,,,f,2024-11-28 01:59:45.159122+00
+2026-03-24 18:19:35.505642+00,Procedural macros for the swiftui crate,,,2248203,,,swiftui-macros,"# swiftui-macros
+
+See the [workspace README](../../README.md) for full documentation.
+",https://github.com/eugenehp/rswift,f,2026-03-24 18:19:35.505642+00
+2023-09-08 17:04:30.527107+00,column oriented storage for tantivy,,https://github.com/quickwit-oss/tantivy,967588,,,izihawa-tantivy-columnar,"# Columnar format
+
+This crate describes columnar format used in tantivy.
+
+## Goals
+
+This format is special in the following way.
+- it needs to be compact
+- accessing a specific column does not require to load the entire columnar. It can be done in 2 to 3 random access.
+- columns of several types can be associated with the same column name.
+- it needs to support columns with different types `(str, u64, i64, f64)`
+and different cardinality `(required, optional, multivalued)`.
+- columns, once loaded, offer cheap random access.
+- it is designed to allow range queries.
+
+# Coercion rules
+
+Users can create a columnar by inserting rows to a `ColumnarWriter`,
+and serializing it into a `Write` object.
+Nothing prevents a user from recording values with different type to the same `column_name`.
+
+In that case, `tantivy-columnar`'s behavior is as follows:
+- JsonValues are grouped into 3 types (String, Number, bool).
+Values that corresponds to different groups are mapped to different columns. For instance, String values are treated independently
+from Number or boolean values. `tantivy-columnar` will simply emit several columns associated to a given column_name.
+- Only one column for a given json value type is emitted.  If number values with different number types are recorded (e.g. u64, i64, f64),
+`tantivy-columnar` will pick the first type that can represents the set of appended value, with the following prioriy order (`i64`, `u64`, `f64`).
+`i64` is picked over `u64` as it is likely to  yield less change of types. Most use cases strictly requiring `u64` show the
+restriction on 50% of the values (e.g. a 64-bit hash). On the other hand, a lot of use cases can show rare negative value.
+
+# Columnar format
+
+This columnar format may have more than one column (with different types) associated to the same `column_name` (see [Coercion rules](#coercion-rules) above).
+The `(column_name, column_type)` couple however uniquely identifies a column.
+That couple is serialized as a column `column_key`.  The format of that key is:
+`[column_name][ZERO_BYTE][column_type_header: u8]`
+
+```
+COLUMNAR:=
+    [COLUMNAR_DATA]
+    [COLUMNAR_KEY_TO_DATA_INDEX]
+    [COLUMNAR_FOOTER];
+
+
+# Columns are sorted by their column key.
+COLUMNAR_DATA:=
+    [COLUMN_DATA]+;
+
+COLUMNAR_FOOTER := [RANGE_SSTABLE_BYTES_LEN: 8 bytes little endian]
+
+```
+
+The columnar file starts by the actual column data, concatenated one after the other,
+sorted by column key.
+
+A sstable associates
+`(column name, column_cardinality, column_type) to range of bytes.
+
+Column name may not contain the zero byte `\0`.
+
+Listing all columns associated to `column_name` can therefore
+be done by listing all keys prefixed by
+`[column_name][ZERO_BYTE]`
+
+The associated range of bytes refer to a range of bytes
+
+This crate exposes a columnar format for tantivy.
+This format is described in README.md
+
+
+The crate introduces the following concepts.
+
+`Columnar` is an equivalent of a dataframe.
+It maps `column_key` to `Column`.
+
+A `Column<T>` asssociates a `RowId` (u32) to any
+number of values.
+
+This is made possible by wrapping a `ColumnIndex` and a `ColumnValue` object.
+The `ColumnValue<T>` represents a mapping that associates each `RowId` to
+exactly one single value.
+
+The `ColumnIndex` then maps each RowId to a set of `RowId` in the
+`ColumnValue`.
+
+For optimization, and compression purposes, the `ColumnIndex` has three
+possible representation, each for different cardinalities.
+
+- Full
+
+All RowId have exactly one value. The ColumnIndex is the trivial mapping.
+
+- Optional
+
+All RowIds can have at most one value. The ColumnIndex is the trivial mapping `ColumnRowId -> Option<ColumnValueRowId>`.
+
+- Multivalued
+
+All RowIds can have any number of values.
+The column index is mapping values to a range.
+
+
+All these objects are implemented an unit tested independently
+in their own module:
+
+- columnar
+- column_index
+- column_values
+- column
+",https://github.com/quickwit-oss/tantivy,f,2025-02-17 11:00:35.779301+00
+2024-03-03 18:54:39.937688+00,Library providing data types to manipulate amounts of money in specific currencies and convert amounts between then,,https://github.com/meuter/oxydized-money-rs,1160834,,,oxydized-money,"# Oxydized Money 💵 ↔ 💶
+
+[![Build](https://github.com/meuter/oxydized-money-rs/actions/workflows/build.yml/badge.svg)](https://github.com/meuter/oxydized-money-rs/actions/workflows/build.yml)
+[![Test](https://github.com/meuter/oxydized-money-rs/actions/workflows/test.yml/badge.svg)](https://github.com/meuter/oxydized-money-rs/actions/workflows/test.yml)
+[![Clippy](https://github.com/meuter/oxydized-money-rs/actions/workflows/clippy.yml/badge.svg)](https://github.com/meuter/oxydized-money-rs/actions/workflows/clippy.yml)
+[![Doc](https://github.com/meuter/oxydized-money-rs/actions/workflows/docs.yml/badge.svg)](https://github.com/meuter/oxydized-money-rs/actions/workflows/docs.yml)
+
+[![Crates.io](https://img.shields.io/crates/v/oxydized-money)](https://crates.io/crates/oxydized-money)
+[![Docs.rs](https://docs.rs/oxydized-money/badge.svg)](https://docs.rs/oxydized-money)
+[![Crates.io](https://img.shields.io/crates/d/oxydized-money)](https://crates.io/crates/oxydized-money)
+[![Crates.io](https://img.shields.io/crates/l/oxydized-money)](https://github.com/meuter/oxydized-money-rs/blob/main/LICENSE)
+
+
+This crate aims at providing data types to manipulate amounts
+of money in specific currencies, convert amounts between currencies
+and make sure that any computation is performed on amounts of the same
+currency.
+
+## Motivations
+
+This crate was introduced because all the existing known alternatives
+have some signigicant drawbacks:
+
+- using native floating point type like `f32` or `f64` suffer from their lack
+  of precision.
+- using [`rust_decimal::Decimal`](https://crates.io/crates/rust_decimal) solves
+  this issue but does not prevent from adding amounts in different currency.
+- using [`rusty_money::Money`](https://crates.io/crates/rusty-money), although
+  slightly better, does not really solve the conversion issue because performing
+  arithmetic operations on amounts of different currencies panics.
+
+Rust being dedicated to proper error handling, all these options feel like
+compromises. This crate aims to improve this by providing three distinct
+data types:
+
+- `Amount` for storing amounts in a given currency.
+- `CurrencyError` for representing any errors (currency mismatch, ...) during
+  arithmetic operations on `Amount`s.
+- `AmountResult` for storing the result of arithmetic operations
+  (either an `Amount` or `CurrencyError`).
+
+Arithmetic operations are defined in such a way that these three types
+inte-roperate almost seemlessly. However, when performing an operation,
+the type of output always reflect whether an error could have occured.
+Operation that cannot fail will output `Amount`s and operations that
+can fail will outout `AmountResult`s. Before getting at the underlying
+`Amount`, `AmountResult`s need to be properly checked for errors.
+
+No more 🦶-guns
+
+## Examples
+
+```rust
+use oxydized_money_macros::{eur, usd, dec};
+use oxydized_money::{
+    Currency::{EUR,USD},
+    CurrencyError,
+    Decimal,
+};
+
+// Amount(USD)
+let capital = usd!(10_000);
+
+// Decimal
+let exchange_rate = dec!(0.928);
+
+// Amount(EUR)
+let converted = capital.converted_to(EUR, exchange_rate);
+
+// Amount(EUR)
+let fees = eur!(15.2);
+
+// Amount(EUR) + Amount(EUR) => AmountResult(EUR)
+let subtotal = converted + fees;
+
+// Amount(EUR) * Decimal => Amount(EUR)
+let extras = eur!(50) * dec!(2);
+
+// AmountResult(EUR) + Amount(EUR) => AmountResult(EUR)
+let total = subtotal + extras;
+
+// Comparing AmountResult with Amounts
+assert_eq!(total, eur!(9_395.200));
+#
+// AmountResult(EUR) + Amount(USD) => AmountResult(Mismatch(EUR,USD))
+let oops = total + usd!(20);
+
+// Comparing AmountResult with CurrencyError
+assert_eq!(oops, CurrencyError::Mismatch(EUR,USD));
+
+// AmountResult(Mismatch(EUR,USD)) + Amount(USD) => AmountResult(Mismatch(EUR,USD))
+let oh_my = oops + usd!(200);
+assert_eq!(oh_my, CurrencyError::Mismatch(EUR,USD));
+
+// ""Everything, everywhere, all at once.""
+assert_eq!(
+    usd!(10_000).converted_to(EUR, dec!(0.928)) + eur!(15.2) + eur!(50)*dec!(2),
+    eur!(9_395.200)
+);
+```
+
+
+
+## Supported Operations
+
+### Binary Operations
+
+#### `Amount`
+
+| Left Operand    | Operator             | Right Operand   |     Output     |
+|:----------------|:--------------------:|:----------------|:---------------|
+| `Amount`        | `*`                  | `Decimal`       | `Amount`       |
+| `Amount`        | `/`                  | `Decimal`       | `AmountResult` |
+| `Amount`        | {`+`,`-`}            | `Amount`        | `AmountResult` |
+| `Amount`        | {`+`,`-`}            | `AmountResult`  | `AmountResult` |
+| `Amount`        | {`==`,`!=`}          | `Amount`        | `bool`         |
+| `Amount`        | {`==`,`!=`}          | `AmountResult`  | `bool`         |
+| `Amount`        | {`<`,`>`,`>=`,`<=` } | `Amount`        | `bool`         |
+
+#### `AmountResult`
+
+| Left Operand    | Operator             | Right Operand   |     Output     |
+|:----------------|:--------------------:|:----------------|:---------------|
+| `AmountResult`  | `*`                  | `Decimal`       | `AmountResult` |
+| `AmountResult`  | `/`                  | `Decimal`       | `AmountResult` |
+| `AmountResult`  | {`+`,`-`}            | `Amount`        | `AmountResult` |
+| `AmountResult`  | {`+`,`-`}            | `AmountResult`  | `AmountResult` |
+| `AmountResult`  | {`==`,`!=`}          | `Amount`        | `bool`         |
+| `AmountResult`  | {`==`,`!=`}          | `AmountResult`  | `bool`         |
+| `AmountResult`  | {`==`,`!=`}          | `CurrencyError` | `bool`         |
+
+#### `CurrencyError`
+
+| Left Operand    | Operator             | Right Operand   |     Output     |
+|:----------------|:--------------------:|:----------------|:---------------|
+| `CurrencyError` | {`==`,`!=`}          | `AmountResult`  | `bool`         |
+| `CurrencyError` | {`==`,`!=`}          | `CurrencyError` | `bool`         |
+
+
+### Unary Operations
+
+#### `Amount`
+
+| Operator  |     Operand     |     Output     |
+|:---------:|:---------------:|:--------------:|
+| `-`       | `Amount`        | `Amount`       |
+
+
+#### `AmountResult`
+
+| Operator  |     Operand     |     Output     |
+|:---------:|:---------------:|:--------------:|
+| `-`       | `AmountResult`  | `AmountResult` |
+
+",https://github.com/meuter/oxydized-money-rs,f,2025-06-09 08:02:05.492905+00
+2024-05-27 05:51:24.251338+00,a command tool for Z4 game framework,,https://zypher.network,1253054,,,z4,,https://github.com/zypher-game/z4,f,2024-11-27 03:26:10.696179+00
+2025-08-03 16:04:59.296923+00,A self-contained Rust reimplementation of the uroman universal romanizer.,,,1779849,,,uroman,"<div align=""center"">
+  <h1>uroman-rs</h1>
+  <p>
+    A self-contained Rust reimplementation of the <code>uroman</code> universal romanizer.
+  </p>
+  <p>
+    <a href=""https://crates.io/crates/uroman""><img src=""https://img.shields.io/crates/v/uroman.svg"" alt=""Crates.io""></a>
+    <a href=""https://github.com/stellanomia/uroman-rs/actions/workflows/rust.yml""><img src=""https://github.com/stellanomia/uroman-rs/actions/workflows/rust.yml/badge.svg"" alt=""CI""></a>
+    <a href=""LICENSE""><img src=""https://img.shields.io/badge/License-Apache--2.0-blue.svg"" alt=""License: Apache-2.0""></a>
+  </p>
+</div>
+
+## Overview
+
+`uroman-rs` is a rewrite of the original `uroman` (Universal Romanizer) in Rust. It converts text in non-Latin writing systems to the Latin alphabet.
+
+It reproduces the original's output rather than improving on it, so its romanization logic and its limitations are those of the original, apart from the cases listed under [Differences from the original](#differences-from-the-original). Before using it, read the original authors' documentation on [Reversibility](https://github.com/isi-nlp/uroman?tab=readme-ov-file#reversibility) and [Known Limitations](https://github.com/isi-nlp/uroman?tab=readme-ov-file#limitations), which apply here too.
+
+`uroman-rs` is licensed under the Apache License 2.0 and includes the original's license notice, as required. See the [License section](#license).
+
+## Features
+
+- Produces byte-identical output to `uroman.py` on the original's `multi-script.txt` test file.
+- Dictionaries are compiled at build time into a zero-copy [`rkyv`](https://github.com/rkyv/rkyv) archive that is read in place, so nothing is parsed at startup. The CLI starts in about a millisecond, and `Uroman::new()` copies a reference.
+- About 188x faster than the Python implementation on that test file, mostly because of startup. (See [Benchmark](#benchmark))
+- Does not raise on the inputs that make the original raise, and supplies the vowel where the original emits a bare apostrophe. (See [Differences from the original](#differences-from-the-original))
+- Output formats: plain string (`str`) and JSON (`edges`, `alts`, `lattice`).
+- No runtime outside the binary; builds to a single executable.
+- Usable as a command-line tool or as a library.
+
+## Installation
+
+The `uroman-rs` project is available as a crate named uroman. You can use it both as a command-line tool and as a library in your Rust projects.
+
+### As a Command-Line Tool
+
+To install the `uroman-rs` command-line tool, run the following:
+
+```bash
+cargo install uroman -F cli
+```
+
+This will install the executable as `uroman-rs` on your system.
+
+### As a Library
+
+Add `uroman-rs` to your project's Cargo.toml.
+
+```bash
+cargo add uroman
+```
+
+## Usage
+
+### Command-Line Interface (CLI)
+
+`uroman-rs` can be used directly from your terminal.
+
+**Show sample conversions:**
+See examples of how various scripts are romanized.
+
+```bash
+uroman-rs --sample
+```
+
+**View all options:**
+
+Display the help message for a full list of commands and flags.
+```bash
+uroman-rs --help
+```
+
+**Use in REPL mode:**
+
+Run `uroman-rs` without any arguments to process input line by line. Press `Ctrl+D` to exit.
+
+```bash
+$ uroman-rs
+>> こんにちは、世界！
+konnichiha, shijie!
+>> ᚺᚨᛚᛚᛟ ᚹᛟᚱᛚᛞ
+hallo world
+>> (Ctrl+D)
+```
+
+
+### Library
+
+```rust
+// Uroman::new() is infallible and does not return a `Result`.
+let uroman = Uroman::new();
+
+let romanized_string/*: String*/ = uroman.romanize_string::<rom_format::Str>(
+    ""✨ユーロマン✨"",
+    Some(""jpn""),
+).to_string();
+
+assert_eq!(romanized_string, ""✨yuuroman✨"");
+println!(""{romanized_string}"");
+```
+For more advanced examples, please see the examples/ directory.
+
+#### Memory-mapped dictionaries (optional)
+
+By default the dictionary archive is embedded in the binary. With the `mmap`
+feature you can instead load it from an external file via memory mapping,
+e.g. to share one dictionary file between many processes:
+
+```toml
+uroman = { version = ""..."", features = [""mmap""] }
+```
+
+```rust,ignore
+// Write the archive out once (e.g. at install time):
+std::fs::write(""uroman.dicts.rkyv"", uroman::dictionary_archive_bytes())?;
+
+// Later, load it with mmap (the archive is validated before use):
+let uroman = uroman::Uroman::from_dictionary_file(""uroman.dicts.rkyv"")?;
+```
+
+## Benchmark
+
+Performance was measured against the original Python implementation using [`hyperfine`](https://github.com/sharkdp/hyperfine). Both produce byte-identical output on the test file.
+
+- Test File: `multi-script.txt` from the original `uroman` repository (32 lines).
+- Environment: Intel Core i7-14700, Ubuntu 26.04, `uroman.py` 1.3.1.1 via `uv run`.
+
+| Implementation             | Mean Time (± σ)  | Relative    |
+|----------------------------|------------------|-------------|
+| `uroman-rs`                | 7.5 ms ± 1.1 ms  | 188x faster |
+| `uroman.py` (via `uv run`) | 1407 ms ± 9 ms   | Baseline    |
+
+On a file this size the figure is dominated by start-up, which is where the
+gap is widest: romanizing a single line takes `uroman-rs` 0.87 ms against
+1.34 s for `uroman.py`, because the dictionaries are read from a
+precompiled archive rather than parsed on every run.
+
+For sustained throughput on large inputs the ratio is smaller and depends on
+the corpus, so no single number is quoted here. Note that `uroman.py` caches
+romanizations per line, so a benchmark built by repeating the same lines
+measures that cache rather than throughput. `uroman-rs` additionally offers
+`--use-parallel` to process lines across cores.
+
+## Differences from the original
+
+`uroman-rs` departs from the original in two places: one where the original raises an exception, and one where it drops a vowel.
+
+### Incomplete percentage patterns
+
+The original script raises on inputs with an incomplete fractional pattern such as `""百分之""` (""percent of ...""), because it expects a number to follow and does not handle its absence. This has been reported upstream (see [isi-nlp/uroman#16](https://github.com/isi-nlp/uroman/issues/16)).
+
+```sh
+$ uv run uroman.py ""百分之多少""
+Traceback (most recent call last):
+  ...
+AttributeError: 'NoneType' object has no attribute 'value'
+```
+
+`uroman-rs` falls back to syllable-by-syllable pinyin:
+
+```sh
+$ uroman-rs ""百分之多少""
+baifenzhiduoshao
+```
+
+### Tibetan letter -A (U+0F60) standing alone
+
+Romanizing `འ` (U+0F60, TIBETAN LETTER -A) on its own, the original produces a bare apostrophe:
+
+```sh
+$ uv run uroman.py ""འ""
+'
+```
+
+The syllable is pronounced. Tibetan is an abugida, so a root letter with no vowel sign carries the inherent vowel /a/, and an output with no vowel in it is not much use to a romanizer. `uroman-rs` supplies the vowel:
+
+```sh
+$ uroman-rs ""འ""
+'a
+```
+
+The apostrophe is kept because that is how [Wylie](https://texts.mandala.library.virginia.edu/text/thl-extended-wylie-transliteration-scheme) and [ALA-LC](https://www.loc.gov/catdir/cpso/romanization/tibetan.pdf) write this letter. The phonetic [THL Simplified](https://en.wikipedia.org/wiki/THL_Simplified_Phonetic_Transcription) system would write just `a`, which would be equally defensible; the claim here is only that the bare `'` is not.
+
+The same applies when `འ` carries a vowel sign, where the original also drops the letter: `འེ` → `'e`, `འུ` → `'u`, `འོ` → `'o`, against `e`, `u`, `o`. `འི` is an exception, romanized `i` as in the original, through a rule this project added to `data/romanization-table.txt`.
+
+Only `འ` as a root letter is affected. Its other uses — silent prefix, silent suffix, and the source of the nasalization in words such as `དགེ་འདུན` — are untouched, and the two implementations agree there (`འགྲོ` → `'gro`, `བའི` → `ba'i`). On the Tibetan line of the original's own `multi-script.txt` they produce identical output.
+
+## License
+
+This project is licensed under the Apache License, Version 2.0.
+
+### Acknowledgements
+
+`uroman-rs` is a Rust implementation of the original `uroman` software by Ulf Hermjakob. As such, it is a derivative work and includes the original license notice in the `NOTICE` file.
+
+Please be aware that any academic publication of projects using `uroman-rs` should acknowledge the use of the original `uroman` software as specified in its license. For details, please see the `NOTICE` file.
+",https://github.com/stellanomia/uroman-rs,f,2026-08-21 08:05:41.138198+00
+2026-08-28 03:33:58.382423+00,Transport-neutral authenticated Core session and event API for Uranus,,,3083337,,,uranus-api-core,,,f,2026-08-28 03:33:58.382423+00
+2024-12-19 07:35:46.197033+00,Write-Ahead Log for for the Malachite BFT consensus engine,,,1488866,,,informalsystems-malachitebft-wal,"<h1 align=""center"">
+<img src=""https://raw.githubusercontent.com/informalsystems/malachite/refs/heads/main/assets/banner.png"" alt=""Malachite"" width=""2400"" align=""center"">
+</h1>
+
+<h4 align=""center"">
+    Flexible BFT Consensus Engine in Rust<br/>
+    State-of-the-art implementation of Tendermint
+</h4>
+
+---
+
+<div align=""center"">
+
+[![Build Status][build-image]][build-link]
+[![Quint tests][quint-image]][quint-link]
+[![MBT tests][mbt-test-image]][mbt-test-link]
+[![Code coverage][coverage-image]][coverage-link]
+
+[![Apache 2.0 Licensed][license-image]][license-link]
+![Rust Stable][rustc-image]
+![Rust 1.82+][rustc-version]
+[![Quint 0.22][quint-version]][quint-repo]
+
+[![Telegram Chat][tg-badge]][tg-url]
+
+[![Documentation][docs-main-image]][docs-main-link]
+
+</div>
+
+## About
+
+Malachite is a Byzantine-fault tolerant (BFT) consensus engine implemented in Rust.
+
+The Malachite team from Informal Systems has officially joined Circle, bringing their expertise and IP to help build Arc, an open Layer-1 blockchain purpose-built for stablecoin finance. Visit [arcnetwork.xyz](https://arcnetwork.xyz) for more information.
+
+Malachite `/ˈmæl.ə.kaɪt/` is pronounced as follows: __""Mala""__ (like in Malaysia) + __""kite""__ (like the flying toy).
+
+> [!IMPORTANT]
+> Malachite is alpha software and under heavy development.
+> The software is provided ""as is"" and has not been externally audited; use at your own risk.
+
+### Goals
+
+Malachite aims to empower developers building decentralized systems—including sequencers, social networks, and Layer-1 blockchains—by offering a flexible, reliable, and high-performance BFT consensus engine. It now serves as the consensus foundation for [Arc](http://arcnetwork.xyz), a new purpose-built blockchain developed by Circle.
+
+### Features
+
+#### Tendermint as a Library
+Bundled with Malachite comes a state-of-the-art implementation of the Tendermint BFT consensus algorithm.
+Tendermint is an [optimistically responsive][responsive] consensus algorithm, and therefore exhibits high-performance, and has found adoption in many decentralized systems through its implementation in Go as part of [CometBFT](https://github.com/cometbft/cometbft/).
+
+#### Design
+Key [design decisions][announcement] in Malachite are heavily inspired by lessons and experiences of maintaining CometBFT throughout the years.
+Malachite addresses numerous points of technical debt in the design of consensus engines, resulting in a lean, flexible, and reliable solution that performs at the highest level.
+
+#### Reliability and Performance
+Parts of Malachite were co-designed with their formal specification and model checking, notably for the Tendermint algorithm, which improved the confidence and reliability of this core library.
+
+Early experiments with Malachite show an average finalization latency of 780 ms at a scale of 100 validators with 1MB blocks.
+Depending on the setup, Malachite can clear up to 2.5 blocks per second or finalize up to 13.5 MB/s (around 50,000 transactions per second).
+
+Future performance benchmarks will be maintained and published as part of Arc’s open-source documentation at a future date.
+
+## Overview
+
+### Repository
+
+The repository is split into three areas, each covering one of the important aspects of this project:
+
+1. [code](./code): Contains the Rust implementation of the Tendermint consensus algorithm, split across multiple Rust crates.
+2. [docs](./docs): Contains Architectural Decision Records (ADRs) and other documentation, such as the 2018 paper describing the core consensus algorithm.
+3. [specs](./specs): Contains English and [Quint][quint-repo] specifications.
+
+### Crates and Status
+
+> [!NOTE]
+> The actual name of each crate is prefixed with `informalsystems-malachitebft-`.
+> For instance, the crate denoted by `core-consensus` below can be found on crates.io as `informalsystems-malachitebft-core-consensus`.
+
+#### Core consensus algorithm
+
+|                       Crate name                      |                                         Crate                                          |                                           Docs                                            |
+|:------------------------------------------------------|:--------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------:|
+|      [core-consensus](code/crates/core-consensus)     | [![core-consensus][core-consensus-crate-image]][core-consensus-crate-link]             | [![core-consensus Docs][core-consensus-docs-image]][core-consensus-docs-link]             |
+|         [core-driver](code/crates/core-driver)        | [![core-driver][core-driver-crate-image]][core-driver-crate-link]                      | [![core-driver Docs][core-driver-docs-image]][core-driver-docs-link]                      |
+|  [core-state-machine](code/crates/core-state-machine) | [![core-state-machine][core-state-machine-crate-image]][core-state-machine-crate-link] | [![core-state-machine Docs][core-state-machine-docs-image]][core-state-machine-docs-link] |
+|          [core-types](code/crates/core-types)         | [![core-types][core-types-crate-image]][core-types-crate-link]                         | [![core-types Docs][core-types-docs-image]][core-types-docs-link]                         |
+|     [core-votekeeper](code/crates/core-votekeeper)    | [![core-votekeeper][core-votekeeper-crate-image]][core-votekeeper-crate-link]          | [![core-votekeeper Docs][core-votekeeper-docs-image]][core-votekeeper-docs-link]          |
+
+#### Consensus engine
+
+|                 Crate name                 |                               Crate                               |                                 Docs                                 |
+|-------------------------------------------:|:-----------------------------------------------------------------:|:--------------------------------------------------------------------:|
+| [app-channel](./code/crates/app-channel)   | [![app-channel][app-channel-crate-image]][app-channel-crate-link] | [![app-channel Docs][app-channel-docs-image]][app-channel-docs-link] |
+|         [app](./code/crates/app)           |             [![app][app-crate-image]][app-crate-link]             |             [![app Docs][app-docs-image]][app-docs-link]             |
+|       [codec](./code/crates/codec)         |          [![codec][codec-crate-image]][codec-crate-link]          |          [![codec Docs][codec-docs-image]][codec-docs-link]          |
+|      [config](./code/crates/config)        |        [![config][config-crate-image]][config-crate-link]         |        [![config Docs][config-docs-image]][config-docs-link]         |
+|   [discovery](./code/crates/discovery)     |    [![discovery][discovery-crate-image]][discovery-crate-link]    |    [![discovery Docs][discovery-docs-image]][discovery-docs-link]    |
+|      [engine](./code/crates/engine)        |        [![engine][engine-crate-image]][engine-crate-link]         |        [![engine Docs][engine-docs-image]][engine-docs-link]         |
+|     [metrics](./code/crates/metrics)       |       [![metrics][metrics-crate-image]][metrics-crate-link]       |       [![metrics Docs][metrics-docs-image]][metrics-docs-link]       |
+|     [network](./code/crates/network)       |       [![network][network-crate-image]][network-crate-link]       |       [![network Docs][network-docs-image]][network-docs-link]       |
+|        [peer](./code/crates/peer)          |           [![peer][peer-crate-image]][peer-crate-link]            |           [![peer Docs][peer-docs-image]][peer-docs-link]            |
+|       [proto](./code/crates/proto)         |          [![proto][proto-crate-image]][proto-crate-link]          |          [![proto Docs][proto-docs-image]][proto-docs-link]          |
+|        [sync](./code/crates/sync)          |           [![sync][sync-crate-image]][sync-crate-link]            |           [![sync Docs][sync-docs-image]][sync-docs-link]            |
+|         [wal](./code/crates/wal)           |             [![wal][wal-crate-image]][wal-crate-link]             |             [![wal Docs][wal-docs-image]][wal-docs-link]             |
+
+
+### Building with Malachite
+
+As a guiding point to understand how to use Malachite, please read [ARCHITECTURE.md](ARCHITECTURE.md).
+
+You can also check out the [examples](./code/examples) for a more in-depth experience.
+
+### Contributing
+
+If you would like to contribute to the Malachite open-source codebase, please see [CONTRIBUTING.md](./CONTRIBUTING.md).
+We invite all contributors.
+
+## Requirements
+
+- Rust v1.82+ ([rustup.rs](https://rustup.rs))
+- Quint v0.22+ ([github.com](https://github.com/informalsystems/quint))
+
+## Acknowledgements
+
+Malachite would not have been possible without the kind support of the Starknet ecosystem.
+We are grateful to StarkWare Industries for prompting the initial discussions of building Tendermint in Rust, to Starknet Foundation for funding and fostering a collaborative environment, and to both of these organizations plus numerous others in the ecosystem for their constructive feedback on earlier designs of Malachite.
+
+We are also thankful for the collaboration with Farcaster.
+This led to further refinements and maturing of the Malachite codebase, and their approach to building complex systems and shipping valuable products is an inspiration for us.
+
+These collaborations reflect work completed prior to the Malachite team joining Circle.
+
+## License
+
+Copyright © 2025 Circle Internet Group, Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the ""License""); you may not use the files in this repository except in compliance with the License. You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an ""AS IS"" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+[docs-main-image]: https://img.shields.io/badge/docs-main-blue?logo=googledocs&logoColor=white
+[docs-main-link]: https://informalsystems.github.io/malachite/
+[build-image]: https://github.com/circlefin/malachite/actions/workflows/rust.yml/badge.svg
+[build-link]: https://github.com/circlefin/malachite/actions/workflows/rust.yml
+[quint-image]: https://github.com/circlefin/malachite/actions/workflows/quint.yml/badge.svg
+[quint-link]: https://github.com/circlefin/malachite/actions/workflows/quint.yml
+[mbt-test-image]: https://github.com/circlefin/malachite/actions/workflows/mbt.yml/badge.svg
+[mbt-test-link]: https://github.com/circlefin/malachite/actions/workflows/mbt.yml
+[coverage-image]: https://codecov.io/gh/informalsystems/malachite/graph/badge.svg?token=B9KY7B6DJF
+[coverage-link]: https://codecov.io/gh/informalsystems/malachite
+[license-image]: https://img.shields.io/badge/license-Apache_2.0-blue.svg
+[license-link]: https://github.com/informalsystems/hermes/blob/master/LICENSE
+[rustc-image]: https://img.shields.io/badge/Rust-stable-orange.svg
+[rustc-version]: https://img.shields.io/badge/Rust-1.82+-orange.svg
+[quint-version]: https://img.shields.io/badge/Quint-0.22-purple.svg
+[quint-repo]: https://github.com/informalsystems/quint
+[tg-url]: https://t.me/MalachiteEngine
+[tg-badge]: https://img.shields.io/badge/Malachite-Engine-blue.svg?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEyIDI0YzYuNjI3IDAgMTItNS4zNzMgMTItMTJTMTguNjI3IDAgMTIgMCAwIDUuMzczIDAgMTJzNS4zNzMgMTIgMTIgMTJaIiBmaWxsPSJ1cmwoI2EpIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik01LjQyNSAxMS44NzFhNzk2LjQxNCA3OTYuNDE0IDAgMCAxIDYuOTk0LTMuMDE4YzMuMzI4LTEuMzg4IDQuMDI3LTEuNjI4IDQuNDc3LTEuNjM4LjEgMCAuMzIuMDIuNDcuMTQuMTIuMS4xNS4yMy4xNy4zMy4wMi4xLjA0LjMxLjAyLjQ3LS4xOCAxLjg5OC0uOTYgNi41MDQtMS4zNiA4LjYyMi0uMTcuOS0uNSAxLjE5OS0uODE5IDEuMjI5LS43LjA2LTEuMjI5LS40Ni0xLjg5OC0uOS0xLjA2LS42ODktMS42NDktMS4xMTktMi42NzgtMS43OTgtMS4xOS0uNzgtLjQyLTEuMjA5LjI2LTEuOTA4LjE4LS4xOCAzLjI0Ny0yLjk3OCAzLjMwNy0zLjIyOC4wMS0uMDMuMDEtLjE1LS4wNi0uMjEtLjA3LS4wNi0uMTctLjA0LS4yNS0uMDItLjExLjAyLTEuNzg4IDEuMTQtNS4wNTYgMy4zNDgtLjQ4LjMzLS45MDkuNDktMS4yOTkuNDgtLjQzLS4wMS0xLjI0OC0uMjQtMS44NjgtLjQ0LS43NS0uMjQtMS4zNDktLjM3LTEuMjk5LS43OS4wMy0uMjIuMzMtLjQ0Ljg5LS42NjlaIiBmaWxsPSIjZmZmIi8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMTEuOTkiIHkxPSIwIiB4Mj0iMTEuOTkiIHkyPSIyMy44MSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiMyQUFCRUUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyMjlFRDkiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48L3N2Zz4K
+[responsive]: https://informal.systems/blog/tendermint-responsiveness
+[announcement]: https://informal.systems/blog/malachite-decentralize-whatever
+[madara]: https://github.com/madara-alliance/madara
+[pathfinder]: https://github.com/eqlabs/pathfinder
+[website-dashboard]: https://informal.systems/malachite/dashboard
+[website-announcements]: https://informal.systems/malachite/blog
+
+[//]: # (crates.io and docs.rs: links and badges)
+[core-consensus-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-core-consensus
+[core-consensus-crate-link]: https://crates.io/crates/informalsystems-malachitebft-core-consensus
+[core-driver-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-core-driver
+[core-driver-crate-link]: https://crates.io/crates/informalsystems-malachitebft-core-driver
+[core-state-machine-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-core-state-machine
+[core-state-machine-crate-link]: https://crates.io/crates/informalsystems-malachitebft-core-state-machine
+[core-types-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-core-types
+[core-types-crate-link]: https://crates.io/crates/informalsystems-malachitebft-core-types
+[core-votekeeper-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-core-votekeeper
+[core-votekeeper-crate-link]: https://crates.io/crates/informalsystems-malachitebft-core-votekeeper
+[core-consensus-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-core-consensus
+[core-consensus-docs-link]: https://docs.rs/informalsystems-malachitebft-core-consensus
+[core-driver-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-core-driver
+[core-driver-docs-link]: https://docs.rs/informalsystems-malachitebft-core-driver
+[core-state-machine-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-core-state-machine
+[core-state-machine-docs-link]: https://docs.rs/informalsystems-malachitebft-core-state-machine
+[core-types-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-core-types
+[core-types-docs-link]: https://docs.rs/informalsystems-malachitebft-core-types
+[core-votekeeper-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-core-votekeeper
+[core-votekeeper-docs-link]: https://docs.rs/informalsystems-malachitebft-core-votekeeper
+[app-channel-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-app-channel
+[app-channel-crate-link]: https://crates.io/crates/informalsystems-malachitebft-app-channel
+[app-channel-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-app-channel
+[app-channel-docs-link]: https://docs.rs/informalsystems-malachitebft-app-channel
+[app-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-app
+[app-crate-link]: https://crates.io/crates/informalsystems-malachitebft-app
+[codec-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-codec
+[codec-crate-link]: https://crates.io/crates/informalsystems-malachitebft-codec
+[config-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-config
+[config-crate-link]: https://crates.io/crates/informalsystems-malachitebft-config
+[discovery-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-discovery
+[discovery-crate-link]: https://crates.io/crates/informalsystems-malachitebft-discovery
+[engine-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-engine
+[engine-crate-link]: https://crates.io/crates/informalsystems-malachitebft-engine
+[metrics-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-metrics
+[metrics-crate-link]: https://crates.io/crates/informalsystems-malachitebft-metrics
+[network-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-network
+[network-crate-link]: https://crates.io/crates/informalsystems-malachitebft-network
+[peer-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-peer
+[peer-crate-link]: https://crates.io/crates/informalsystems-malachitebft-peer
+[proto-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-proto
+[proto-crate-link]: https://crates.io/crates/informalsystems-malachitebft-proto
+[sync-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-sync
+[sync-crate-link]: https://crates.io/crates/informalsystems-malachitebft-sync
+[wal-crate-image]: https://img.shields.io/crates/v/informalsystems-malachitebft-wal
+[wal-crate-link]: https://crates.io/crates/informalsystems-malachitebft-wal
+[app-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-app
+[app-docs-link]: https://docs.rs/informalsystems-malachitebft-app
+[codec-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-codec
+[codec-docs-link]: https://docs.rs/informalsystems-malachitebft-codec
+[config-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-config
+[config-docs-link]: https://docs.rs/informalsystems-malachitebft-config
+[discovery-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-discovery
+[discovery-docs-link]: https://docs.rs/informalsystems-malachitebft-discovery
+[engine-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-engine
+[engine-docs-link]: https://docs.rs/informalsystems-malachitebft-engine
+[metrics-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-metrics
+[metrics-docs-link]: https://docs.rs/informalsystems-malachitebft-metrics
+[network-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-network
+[network-docs-link]: https://docs.rs/informalsystems-malachitebft-network
+[peer-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-peer
+[peer-docs-link]: https://docs.rs/informalsystems-malachitebft-peer
+[proto-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-proto
+[proto-docs-link]: https://docs.rs/informalsystems-malachitebft-proto
+[sync-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-sync
+[sync-docs-link]: https://docs.rs/informalsystems-malachitebft-sync
+[wal-docs-image]: https://img.shields.io/docsrs/informalsystems-malachitebft-wal
+[wal-docs-link]: https://docs.rs/informalsystems-malachitebft-wal
+",https://github.com/informalsystems/malachite,f,2025-10-15 14:39:21.914319+00
+2024-03-17 19:56:30.129693+00,Defines the goldboot image format,,https://goldboot.fossable.org,1176760,,,goldboot-image,,https://github.com/fossable/goldboot,f,2025-03-04 04:05:15.146606+00
+2024-11-03 15:47:22.600852+00,Cryptographic handshake protocol using the noise framework.,,,1433883,,,mwc-libp2p-noise,,https://github.com/mwcproject/rust-libp2p,f,2024-11-06 14:24:33.785798+00
+2026-09-22 21:28:49.371223+00,A pure-Rust reimplementation of the QuickJS-ng JavaScript engine,,,3253089,,,rqjs-core,,https://github.com/eugenehp/quickjs-rs,f,2026-09-22 21:28:49.371223+00
+2023-12-08 12:48:09.814308+00,A rust implementation of the nvd-cvss.,,https://github.com/emo-crab/scap-rs,1061984,,,nvd-cvss,## CVSS,https://github.com/emo-crab/scap-rs,f,2024-12-19 07:33:00.273909+00
+2025-10-22 11:04:48.830575+00,yet another chat thing?,,,1895490,,,lamprey-sdk,"# lamprey-sdk
+
+sdk for interacting with lamprey
+",,f,2026-10-30 23:02:01.027047+00
+2025-07-06 10:26:18.397242+00,SQL for Kubernetes resources,,,1740055,,,kuqu,"# kuqu
+
+SQL for Kubernetes resources.
+
+## Concept
+
+*kuqu* is a tool that allows you to query Kubernetes resources using SQL-like syntax.
+By leveraging [Apache DataFusion](https://datafusion.apache.org/)
+(hereinafter referred to as DataFusion),
+it treats resources within a Kubernetes cluster as tabular data,
+enabling you to perform operations such as filtering, aggregation, and joins
+using familiar SQL syntax.
+
+While traditional kubectl commands make it difficult to search for resources
+with complex conditions or perform aggregations,
+*kuqu* allows you to analyze Kubernetes resources with the same intuitive approach
+as working with databases.
+For example, you can aggregate the number of Pods that meet specific conditions
+or join and display information across multiple resource types.
+
+## Features
+
+- [x] High-performance query execution with DataFusion
+    - [x] Querying Kubernetes resources using SQL syntax
+    - [x] Automatic resource structure recognition through dynamic schema inference
+    - [x] Direct access to JSON fields (e.g., `spec.nodeName`)
+    - [x] JOIN operations between multiple resource types
+    - [ ] Query result export functionality
+    - [ ] User-defined function (UDF) definition and registration
+          (is this even possible?)
+- [x] Support for namespace-scoped and cluster-scoped resources
+    - [ ] AllNamespace support
+- [x] Custom Resource Definition (CRD) support
+- [ ] Change detection (i.e., watch) support for query results
+- [ ] Provide as a Rust library
+- [ ] Provide as a kubectl plugin
+- [ ] Query for manifest files
+    - e.g. For comparison with the actual resource state
+- [ ] REPL
+    - [ ] Query result caching mechanism
+    - [ ] Query history and favorites functionality
+- [ ] Visualization (is this even possible?)
+    - [ ] Colored output
+    - [ ] Automatic table width adjustment
+    - [ ] Table scrolling functionality
+- [ ] Configuration file
+    - [ ] Alias
+
+## Installation
+
+### Homebrew
+
+```bash
+brew install ynqa/tap/kuqu
+```
+
+### Cargo
+
+```bash
+cargo install kuqu
+
+# Or from source (at kuqu root)
+cargo install --path .
+```
+
+### Shell
+
+```bash
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/ynqa/kuqu/releases/download/v0.1.0/kuqu-installer.sh | sh
+```
+
+## Examples
+
+```bash
+# List all running pods
+kuqu ""SELECT metadata.name, metadata.namespace FROM pods WHERE status.phase = 'Running'""
+
+# List all services like redis
+kuqu ""SELECT metadata.name FROM services WHERE metadata.name LIKE '%redis%'""
+
+# Example for a CRD
+kuqu ""SELECT metadata.name FROM 'envoyproxies.gateway.envoyproxy.io'""
+
+# List deployments with ready replicas
+kuqu ""SELECT metadata.name, spec.replicas, status.readyReplicas FROM deployments 
+     WHERE spec.replicas == status.readyReplicas""
+
+# List all pods with their node names and instance types
+kuqu ""SELECT pod.metadata.name, pod.spec.nodeName, 
+            node.metadata.labels.'node.kubernetes.io/instance-type' 
+     FROM pod JOIN node ON pod.spec.nodeName == node.metadata.name""
+```
+
+## SQL Syntax
+
+SQL syntax available in *kuqu* conforms to DataFusion.
+DataFusion is a high-performance query engine that provides many extended features
+in addition to standard SQL functionality.
+
+For detailed information about supported SQL syntax,
+please refer to the official DataFusion documentation:
+
+**[DataFusion SQL Reference](https://datafusion.apache.org/user-guide/sql/index.html)**
+
+This documentation provides detailed explanations of all available SQL features,
+including SELECT statements, WHERE clauses, JOIN operations, aggregate functions,
+window functions, and more.
+
+> [!NOTE]
+> *kuqu* does not comprehensively test all DataFusion SQL features,
+> so some queries or syntax may not work as expected.
+> If you encounter issues, please use more basic SQL syntax
+> or report them as GitHub Issues.
+
+## Schema Inference
+
+Instead of using Kubernetes' `/openapi/v3` endpoint,
+*kuqu* dynamically infers schemas from actual resource data.
+
+The reason for this design decision is that the OpenAPI specification
+cannot deterministically resolve schemas for dynamically determined keys
+in fields with `additionalProperties=true`,
+such as `metadata.labels` and `metadata.annotations`.
+These fields allow users to add arbitrary key-value pairs at runtime,
+making it difficult to define schemas in advance.
+
+By adopting dynamic schema inference,
+*kuqu* enables SQL queries against all fields that exist in actual resources
+(including custom labels and annotations),
+providing a more flexible and practical query experience.
+
+However, since schemas are inferred at query execution time,
+queries may take longer when there are many resources
+or when resources with complex structures exist
+(we are considering mechanisms to limit the number of resources
+used for schema inference).
+
+## Table Specification
+
+In *kuqu*, Kubernetes resources are treated as SQL tables.
+Table name (resource name) specification supports flexible formats.
+
+### Table Format
+
+```sql
+-- Basic format: resource name only (uses default namespace)
+SELECT * FROM pods;
+
+-- Namespace specification: resource_name/namespace_name
+SELECT * FROM 'pods/kube-system';
+
+-- Non-namespaced resources (namespace specification is ignored)
+SELECT * FROM nodes;
+```
+
+### Resource Name Formats
+
+*kuqu* allows you to specify Kubernetes resources in multiple ways:
+
+1. **Basic resource names**: `pods`, `deployments`, `services`
+2. **Singular names**: `pod`, `deployment`, `service`
+3. **Short names**: `po`, `deploy`, `svc`
+4. **Group-qualified resource names**: `deployments.apps`,
+   `rolebindings.rbac.authorization.k8s.io`
+
+## Acknowledgements
+
+This project was made possible thanks to the valuable advice and insights from [@zimagen](https://github.com/zimagen).
+Those played a crucial role in shaping the ideas behind this project.
+",https://github.com/ynqa/kuqu,f,2025-09-17 15:42:03.624414+00
+2026-06-10 05:27:32.006387+00,"Shared tool traits, registry, and dispatcher for the Orchustr tool crates.",,,2590069,,,or-tools-core,,,f,2026-06-10 05:27:32.006387+00
+2024-08-26 01:02:02.09732+00,Analyze syn ExprClosure body,,,1351633,,,syn-dissect-closure,,,f,2026-07-29 01:43:30.18775+00
+2026-01-22 02:16:02.791968+00,Nym's implementation of a client that sends and receives IP packets,https://nymtech.net,https://nymtech.net,2060584,,,nym-ip-packet-client,"<!--
+Copyright 2020 - Nym Technologies SA <contact@nymtech.net>
+SPDX-License-Identifier: Apache-2.0
+-->
+
+## The Nym Privacy Platform
+
+The platform is composed of multiple Rust crates. Top-level executable binary crates include:
+
+* `nym-node` - a tool for running a node within the Nym network. Nym Nodes containing functionality such as `mixnode`, `entry-gateway` and `exit-gateway` are fundamental components of Nym Mixnet architecture. Nym Nodes are ran by decentralised node operators. Read more about `nym-node` in [Operators Guide documentation](https://nymtech.net/operators/nodes/nym-node.html). Network functionality of `nym-node` (labeled with `--mode` flag) can be:
+	- `mixnode` - shuffles [Sphinx](https://github.com/nymtech/sphinx) packets together to provide privacy against network-level attackers.
+	- `gateway` - acts sort of like a mailbox for mixnet messages, which removes the need for direct delivery to potentially offline or firewalled devices. Gateways can be further categorized as `entry-gateway` and `exit-gateway`. The latter has an extra embedded IP packet router and Network requester to route data to the internet.
+* `nym-client` - an executable which you can build into your own applications. Use it for interacting with Nym nodes.
+* `nym-socks5-client` - a Socks5 proxy you can run on your machine and use with existing applications.
+* `nym-explorer` - a (projected) block explorer and (existing) mixnet viewer.
+* `nym-wallet` - a desktop wallet implemented using the [Tauri](https://tauri.app)) framework.
+* `nym-cli` - a tool for interacting with the network from the CLI.
+<!-- coming soon
+* `nym-network-monitor` - sends packets through the full system to check that they are working as expected, and stores node uptime histories as the basis of a rewards system (""mixmining"" or ""proof-of-mixing"").
+-->
+
+```ascii
+                      ┌─►mix──┐  mix     mix
+                      │       │
+            Entry     │       │                   Exit
+client ───► Gateway ──┘  mix  │  mix  ┌─►mix ───► Gateway ───► internet
+                              │       │
+                              │       │
+                         mix  └─►mix──┘  mix
+
+```
+
+<!-- This is broken 
+[![Build Status](https://img.shields.io/github/actions/workflow/status/nymtech/nym/build.yml?branch=develop&style=for-the-badge&logo=github-actions)](https://github.com/nymtech/nym/actions?query=branch%3Adevelop)
+-->
+
+> This project integrates with the Midnight Network
+
+### Building
+
+* Platform build instructions are available on Nym [Operators Guide documentation](https://nymtech.net/operators/binaries/building-nym.html).
+* Wallet build instructions are available [here](https://github.com/nymtech/nym/tree/master/nym-wallet#installation-prerequisites---linux--mac).
+
+### Developing
+
+References for developers:
+
+* [Dev Docs](https://nym.com/docs/developers)
+* [SDKs](https://nym.com/docs/developers/rust)
+* [Network Docs](https://nym.com/docs/network)
+* [Release Cycle - git flow](https://nym.com/docs/operators/release-cycle)
+
+### Releasing
+
+* [Publishing Rust crates to crates.io](./crate-publishing.md)
+* [Publishing the TypeScript SDK to npm](./ts-sdk-publishing.md)
+
+### Developer chat
+
+You can chat to us in the #dev channel on [Matrix](https://matrix.to/#/#dev:nymtech.chat) or on the [Nym Forum](https://forum.nymtech.net).
+
+### Tokenomics & Rewards
+
+Nym network economic incentives, operator and validator rewards, and scalability of the network are determined according to the principles laid out in the section 6 of [Nym Whitepaper](https://nymtech.net/nym-whitepaper.pdf).
+Initial reward pool is set to 250 million Nym, making the circulating supply 750 million Nym.
+
+### Licensing and copyright information
+
+This is a monorepo and components that make up Nym as a system are licensed individually, so for accurate information, please check individual files.
+
+As a general approach, licensing is as follows this pattern:
+
+- applications and binaries are GPLv3
+- libraries and components are Apache 2.0 or MIT
+- documentation is Apache 2.0 or CC0-1.0
+
+Nym Node Operators and Validators Terms and Conditions can be found [here](https://nym.com/operators-validators-terms).
+
+## Getting Started
+
+Requires [Node.js](https://nodejs.org) version 24.
+
+```bash
+pnpm install
+```
+
+```bash
+pnpm build
+```
+",https://github.com/nymtech/nym,f,2026-09-04 11:23:21.613674+00
+2021-10-18 16:55:32.551295+00,Board Support crate for the Adafruit Neo Trinkey,,,466893,,,neo_trinkey,"# Adafruit Neo Trinkey Board Support Crate
+
+This crate provides a type-safe API for working with the [Adafruit Neo Trinkey
+board](https://www.adafruit.com/product/4870).
+
+## Prerequisites
+* Install the cross compile toolchain `rustup target add thumbv6m-none-eabi`
+* Install [cargo-hf2 the hf2 bootloader flasher tool](https://crates.io/crates/cargo-hf2) however your platform requires
+
+## Uploading an example
+Check out the repository for examples:
+
+https://github.com/atsamd-rs/atsamd/tree/master/boards/neo_trinkey/examples
+
+* Be in this directory `cd boards/neo_trinkey`
+* Put your device in bootloader mode usually by hitting the reset button twice.
+* Build and upload in one step
+```bash
+$ cargo hf2 --release --example <example-name> --features <any-required-features>
+```
+
+You should see the following output
+```text
+Finished release [optimized] target(s) in 5.55s
+Trying  Ok(Some(""Adafruit Industries"")) Ok(Some(""NeoPixel Trinkey M0""))
+Flashing ""/Users/danielmason/projects/rust/atsamd/boards/neo_trinkey/target/thumbv6m-none-eabi/release/examples/blinky_basic""
+Finished in 0.051s
+```
+Note: If hf2 can not find your Neo Trinkey, check that you have the latest version of cargo-hf2.
+
+If it still doesn't work you can add the Product ID (pid) and Vendor ID (vid) which are usually `0x00ef` and `0x239a`
+respectively.
+
+```bash
+$ cargo hf2 --release --example <example-name> --features <any-required-features> --pid 0x00ef --vid 0x239a
+```
+
+If this _still_ doesn't work, check the USB device in your system settings in case your pid and vid are different.
+
+## Examples
+
+### Blinky basic
+
+```bash
+$ cargo hf2 --release --example blinky_basic --features leds
+```
+
+Once the Neo Trinkey has restarted, you will see the 4 leds flash in unison. Each led will be a different color (pink,
+cyan, yellow and white).
+
+**Warning** even though the lights are turned down very low, they are still very bright.
+
+### Blinky rainbow
+
+```bash
+$ cargo hf2 --release --example blinky_rainbow --features leds
+```
+
+A slightly more satisfying version of blinky where the lights will cycle through the color spectrum.
+
+**Warning** even though the lights are turned down very low, they are still very bright.
+
+### USB ack
+
+```bash
+$ cargo hf2 --release --example usb_ack --features usb
+```
+
+Once the device has reset, all the lights will be off. You will then need to find the USB device on your machine.
+
+Usually this is located in `/dev/cu.usbmodemTRINKEY_ACK1`. though if you have multiple trinkeys plugged in and running
+this example, the number at the end may change.
+
+You can then send the USB device bytes. Each time the device receives data, it will respond with ""Received: X"" where X
+is the data that it received. To test this in a variety of ways but the easiest is probably with screen.
+
+Connect to the device like this (9600 is the baud rate)
+
+```bash
+$ screen /dev/cu.usbmodemTRINKEY_ECHO1 9600
+```
+
+You can then press keys and you should get a response Eg:
+
+```text
+Received: h
+Received: e
+Received: l
+Received: l
+Received: o
+Received:
+Received: w
+Received: o
+Received: r
+Received: l
+Received: d
+```
+
+To quit screen, use `ctrl-a` followed by `crtl-\` then `y`
+
+",https://github.com/atsamd-rs/atsamd,f,2025-07-07 00:03:18.920033+00
+2025-10-18 20:28:27.711854+00,Hızlı Makes Making Macros Fast,https://docs.rs/hizli,,1889602,,,hizli-core,,,f,2025-10-20 16:57:08.263708+00
+2025-10-22 11:02:37.384786+00,transpiler of eggplant to generate rust code from egglog code,,,1895487,,,eggplant-transpiler,,https://github.com/MilkBlock/eggplant,f,2025-10-23 05:12:46.483651+00
+2025-11-13 01:59:06.873088+00,User interface functionality for viot,,,1930290,,,viot-ui,,https://github.com/rlove/viot,f,2025-11-13 01:59:06.873088+00
+2025-12-17 05:49:31.456988+00,High-performance SIMD-accelerated DNA sequence encoding supporting all IUPAC nucleotide codes,,,1989339,,,simdna,"<p align=""left"">
+  <img src=""./artefacts/simdna.svg"" alt=""SimDNA Logo"" width=""200"">
+</p>
+
+*High-performance DNA/RNA sequence encoding and decoding using SIMD instructions with automatic fallback to scalar implementations.*
+
+[![Crates.io](https://img.shields.io/crates/v/simdna.svg)](https://crates.io/crates/simdna)
+[![Docs.rs](https://docs.rs/simdna/badge.svg)](https://docs.rs/simdna)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [Features](#features)
+- [Installation](#installation)
+- [IUPAC Nucleotide Codes](#iupac-nucleotide-codes)
+  - [Standard Nucleotides](#standard-nucleotides)
+  - [Two-Base Ambiguity Codes](#two-base-ambiguity-codes)
+  - [Three-Base Ambiguity Codes](#three-base-ambiguity-codes)
+  - [Wildcards and Gaps](#wildcards-and-gaps)
+  - [Bit Rotation Property](#bit-rotation-property)
+- [Usage](#usage)
+- [Reverse Complement](#reverse-complement)
+  - [IUPAC Ambiguity Code Complements](#iupac-ambiguity-code-complements)
+- [Input Handling](#input-handling)
+- [Integration](#integration)
+  - [Working with seq\_io](#working-with-seq_io)
+  - [Working with noodles](#working-with-noodles)
+  - [Working with rust-bio](#working-with-rust-bio)
+  - [Zero-Copy Integration](#zero-copy-integration)
+- [Platform Support](#platform-support)
+- [Performance](#performance)
+- [Testing](#testing)
+  - [Unit Tests](#unit-tests)
+  - [Fuzz Testing](#fuzz-testing)
+- [Contributing](#contributing)
+- [Changelog](#changelog)
