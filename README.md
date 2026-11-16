@@ -14,7 +14,8 @@
 ```
 作业/
 ├── README.md                     本文件：一键/分步复现说明
-├── 报告.md                       项目报告（问题、数据、清洗、关联、分析、可视化、结论、局限、AI）
+├── 报告.md                       项目报告（Markdown 源）
+├── 报告.docx                     项目报告（Word 提交版，17 页，含图）
 ├── data_sources.md               7 个数据源的来源、规模、字段、许可、关联键
 ├── AI_USAGE.md                   AI 使用记录、核验方式、5 个错误的纠正过程、反思
 ├── 关联图.html                   多源数据关联图 / 数据血缘（实体 · 时间 · 网络 · 机构 · 跨生态）
@@ -22,6 +23,7 @@
 ├── 可视化/
 │   ├── 作图.py                   生成 可视化.html（可重跑）
 │   ├── 导出图.py                 把 6 张核心图 + 血缘图/领域图/增量图导出为 PNG
+│   ├── 做DOCX.py                 把 报告.md 排版成 报告.docx
 │   └── 做PPT.py                  生成 中期展示.pptx
 ├── 图集/                         9 张 PNG（图1–图9），PPT 与报告插图用
 ├── 中期展示.pptx                 课堂展示用（文字+表格版；图请从 可视化.html 截图替换占位框）
@@ -46,7 +48,7 @@
 
 ## 2. 环境
 
-- Python 3.11+；`pandas`、`numpy`、`pyarrow`（读 parquet）、`python-pptx`（生成 PPT）
+- Python 3.11+；`pandas`、`numpy`、`pyarrow`（读 parquet）、`python-pptx`（生成 PPT）、`python-docx`（生成 Word）
 - 可选：`pypdf` 或 `pdftotext`（复核基金会 PDF）
 - 无 GPU、无数据库依赖；全部为单机脚本
 
@@ -93,6 +95,9 @@ python 作业/整合/构建.py              # → 包级融合表-crates.parquet
 
 # ④ 六张图
 python 作业/可视化/作图.py            # → 可视化.html
+
+# ⑤ Word 版报告
+python 作业/可视化/做DOCX.py          # → 报告.docx
 ```
 
 底基序列与 N90 序列由 `依赖图/年代图/入驻/75-底基-无可选.py` 与 `76-N90-主图.py` 生成（已在完整仓库内，产物随 `依赖图/` 提供）。
