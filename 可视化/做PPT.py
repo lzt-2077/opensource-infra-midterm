@@ -14,6 +14,7 @@ from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from PIL import Image
 from pptx.oxml.ns import qn
 
 
@@ -102,6 +103,34 @@ def note(slide, text):
     tx(slide, 0.65, 6.95, 12, 0.35, text, 10, DIM)
 
 
+IMGDIR = R / '图集'
+
+
+def pic(slide, name, x, y, w, h):
+    p = IMGDIR / name
+    if not p.exists():
+        tx(slide, x, y, w, h, f'（缺少 {name}，先跑 可视化/导出图.py）', 12, RED)
+        return
+    iw, ih = Image.open(p).size
+    sc = min(w / iw, h / ih)
+    pw, ph = iw * sc, ih * sc
+    slide.shapes.add_picture(str(p), Inches(x + (w - pw) / 2), Inches(y + (h - ph) / 2),
+                             Inches(pw), Inches(ph))
+
+
+def gallery(kicker, title, items, boxh=4.55, capy=6.35):
+    s = prs.slides.add_slide(BLANK)
+    head(s, kicker, title)
+    if len(items) == 1:
+        name, cap = items[0]
+        pic(s, name, 1.2, 1.65, 10.9, boxh)
+        tx(s, 1.2, capy, 10.9, 0.45, cap, 11, DIM)
+    else:
+        for (name, cap), x in zip(items, [0.4, 6.55]):
+            pic(s, name, x, 1.62, 6.35, boxh)
+            tx(s, x, capy, 6.35, 0.55, cap, 11, DIM)
+
+
 # ───────────────────────── 1 封面 ─────────────────────────
 s = prs.slides.add_slide(BLANK)
 tx(s, 0.9, 1.7, 11.5, 0.4, '大数据原理与应用 · 中期项目展示', 15, DIM)
@@ -172,6 +201,27 @@ tx(s, 0.65, 5.45, 12.0, 1.0,
    13, DIM, spacing=1.4)
 note(s, '对应报告 §4、§3.3')
 
+# ───────────────────────── 4b 数据血缘 ─────────────────────────
+s = prs.slides.add_slide(BLANK)
+head(s, '03b  数据血缘', '七个源怎么接成一张可以共同分析的表？')
+pic(s, '图6-数据血缘关联图.png', 0.45, 1.55, 6.9, 5.15)
+tx(s, 7.55, 1.7, 5.3, 4.9,
+   """三条实质性的连接
+
+① 实体：crate → owner_id → GitHub login → 主体类型
+   行级 54.0%、账号级 47.1%；未解析显式记为 unmapped
+
+② 时间：versions.created_at → 月度锚点
+   132 个快照，零缺失
+
+③ 网络：s → t 依赖边构成有向图
+   入度 / 传递可达 / 技术分层
+
+辅助：仓库组织 → 域名 → LF/CNCF 机构名；
+      同一套方法在 cargo / PyPI 各跑一遍""",
+   12, INK, spacing=1.25)
+note(s, '完整图见 作业/关联图.html ｜ 对应报告 §4')
+
 # ───────────────────────── 5 方法与负面结果 ─────────────────────────
 s = prs.slides.add_slide(BLANK)
 head(s, '04  方法与一个必须报告的负面结果', '先能稳定地划出「底基层」，才谈得上谁供养')
@@ -222,7 +272,7 @@ tx(s, 7.2, 1.7, 5.5, 3.4,
    '口径提醒：三列模型（法人类型 × 组织形态 × 财政赞助）\n'
    '三个维度正交、不可相加。',
    13, INK, spacing=1.4)
-note(s, '配图：可视化.html 图 4 ｜ 对应报告 §5.4')
+note(s, '配图：图集/图4-底基由谁供养.png ｜ 对应报告 §5.4')
 
 # ───────────────────────── 7 Q2 ─────────────────────────
 s = prs.slides.add_slide(BLANK)
@@ -252,7 +302,7 @@ tx(s, 7.1, 2.55, 5.6, 3.8,
    '结论只说到「账号级口径」为止：不把它解释成\n'
    '「隐瞒所有权」。',
    13, INK, spacing=1.4)
-note(s, '配图：可视化.html 图 5 ｜ 对应报告 §5.5')
+note(s, '配图：图集/图5-公司影响力.png ｜ 对应报告 §5.5')
 
 # ───────────────────────── 8 Q3 + Q4 ─────────────────────────
 s = prs.slides.add_slide(BLANK)
@@ -272,6 +322,26 @@ table(s, 0.65, 5.15, 12.0, 1.3, [
     ['cargo', '66,315', '1,101,475', '0.9018', '4.82%', '54.33%', '77.34%'],
 ], size=11, col_widths=[2.6, 1.6, 1.8, 1.5, 1.4, 1.5, 1.6])
 note(s, '早期「cargo 尖塔 vs PyPI 高原、单点差 2.5 倍」是分母不一致造成的伪差距，已作废 ｜ 对应报告 §5.6、§5.7')
+
+# ───────────────────────── 图集 ─────────────────────────
+gallery('图集 1/4  时间', '集中度在升，底基在稀释', [
+    ('图1-依赖集中度.png', '90% 的依赖边集中在多少比例的包里：40.5%（2015-01）→ 4.8%（2025-12）'),
+    ('图2-底基扩张稀释.png', '底基包 5 → 319 个；占生态 1.23% → 0.18%——绝对扩张，相对稀释'),
+], boxh=3.05, capy=5.0)
+
+gallery('图集 2/4  网络', '谁在支撑别人的运行时？', [
+    ('图3-谁在支撑运行时.png', '入度 top-24：语言原语、通用工具、运行时与应用框架混在同一层'),
+    ('图7-领域分块-76块.png', '探索性聚类（早期 405 底基口径）：76 个领域块（Q=0.79）；因跨月不稳定未进入结论（§5.3）'),
+], boxh=4.65, capy=6.45)
+
+gallery('图集 3/4  跨源', '钱与影响力：底基由谁供养', [
+    ('图4-底基由谁供养.png', '底基入边 77.9% 无法人；公司 1.4%（按包数不加权 16/319 = 5.0%）'),
+    ('图5-公司影响力.png', '8,175 个公司参与包中 94.1% 没有公司组织账号（账号级；命名空间级 84.9%）'),
+], boxh=3.05, capy=5.0)
+
+gallery('图集 4/4  时间 × 网络', '一个月里，依赖图变了多少？', [
+    ('图9-快照增量.png', '示例（2016-11→2016-12，1,583 节点子图）：绿色=新增节点，黄色=换层；正式序列为 132 个月度快照'),
+], boxh=4.95, capy=6.75)
 
 # ───────────────────────── 9 局限 / AI / 复现 ─────────────────────────
 s = prs.slides.add_slide(BLANK)

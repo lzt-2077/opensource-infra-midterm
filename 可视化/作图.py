@@ -114,13 +114,16 @@ for i, r in top.iterrows():
     g3.append(f'<rect x="204" y="{y+3}" width="{w:.1f}" height="{rowh-8}" fill="{col}" opacity="0.85"/>')
     g3.append(f'<text x="{204+w+6:.1f}" y="{y+15}" font-size="11" fill="{C["dim"]}">{int(r["入度"]):,}</text>')
 # 图例
-ly = top0 + ph + 24
+ly = top0 + ph + 22
 g3.append(f'<text x="204" y="{ly}" font-size="11" fill="{C["dim"]}">技术层：</text>')
-lx = 270
-for k, col in LAYER_COLOR.items():
-    g3.append(f'<rect x="{lx}" y="{ly-9}" width="10" height="10" fill="{col}"/>')
-    g3.append(f'<text x="{lx+14}" y="{ly}" font-size="11" fill="{C["ink"]}">{k}</text>')
-    lx += 18 + len(k) * 10.5
+_items = list(LAYER_COLOR.items())
+for row, chunk in enumerate([_items[:4], _items[4:]]):
+    lx = 270
+    yy = ly + row * 20
+    for k, col in chunk:
+        g3.append(f'<rect x="{lx}" y="{yy-9}" width="10" height="10" fill="{col}"/>')
+        g3.append(f'<text x="{lx+14}" y="{yy}" font-size="11" fill="{C["ink"]}">{k}</text>')
+        lx += 18 + len(k) * 10.5
 g3.append('</svg>')
 CH3 = ''.join(g3)
 
@@ -170,7 +173,7 @@ n_own, n_emp = 483, 7692
 w1 = top_w * n_own / (n_own + n_emp)
 g5.append(f'<rect x="{x0}" y="{y}" width="{w1:.1f}" height="36" fill="{C["red"]}" opacity="0.85"/>')
 g5.append(f'<rect x="{x0+w1:.1f}" y="{y}" width="{top_w-w1:.1f}" height="36" fill="{C["blue"]}" opacity="0.85"/>')
-g5.append(f'<text x="{x0+top_w+12}" y="{y+23}" font-size="12" fill="{C["ink"]}">'
+g5.append(f'<text x="{x0}" y="{y-7}" font-size="12" fill="{C["red"]}">'
           f'有公司账号 {n_own} 个（{100*n_own/(n_own+n_emp):.1f}%）</text>')
 g5.append(f'<text x="{x0+w1+14:.1f}" y="{y+23}" font-size="12" fill="#fff">'
           f'无公司账号 {n_emp:,} 个（{100*n_emp/(n_own+n_emp):.1f}%）</text>')
